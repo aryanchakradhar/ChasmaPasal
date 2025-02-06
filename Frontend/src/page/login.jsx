@@ -53,6 +53,7 @@ export default function Login() {
   return (
     <div className="w-full h-screen lg:grid lg:grid-cols-2 lg:gap-x-8">
       <div className="lg:flex justify-center items-center h-full hidden">
+        <div>
         <img
           src="/images/Logo.png"
           alt="Logo"
@@ -60,10 +61,11 @@ export default function Login() {
           height="310"
           className="object-cover"
         />
+        </div>
       </div>
 
       <div className="flex items-center justify-center h-full bg-gray-100">
-        <Card className="mx-auto max-w-h-sm">
+        <Card className="mx-auto max-w-sm">
           <CardHeader>
             <CardTitle className="text-xl">Sign In</CardTitle>
           </CardHeader>
