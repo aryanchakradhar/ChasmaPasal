@@ -15,10 +15,16 @@ const userSchema = new mongoose.Schema({
       required: true,
       unique: true,
     },
+    role: {
+      type: String,
+      default: "user",
+      required: true,
+    },
     password: {
       type: String,
       required: true,
     }
+
 });
 
 userSchema.methods.matchPassword = async function (enteredPassword) {
