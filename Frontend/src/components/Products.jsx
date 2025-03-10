@@ -2,31 +2,31 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Card } from "./ui/card";
 import { toast } from "react-toastify";
-import { Productsdata } from "./data/Productsdata";  // Importing dummy data
+import axios from "axios"; 
+// import { Productsdata } from "./data/Productsdata";  
 
 const Products = () => {
   const [filter, setFilter] = useState('');
   const [products, setProducts] = useState([]);
 
-  // Commented out API fetching code
-  // const baseUrl = import.meta.env.VITE_APP_BASE_URL;
-  // useEffect(() => {
-  //   const getProducts = async() => {
-  //     try {
-  //       const response = await axios.get(`${baseUrl}/products`);
-  //       setProducts(response.data);
-  //     } catch (error) {
-  //       console.error(error);
-  //       toast.error("Failed to fetch products");
-  //     }
-  //   }
-  //   getProducts();
-  // }, [baseUrl]);
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+  useEffect(() => {
+    const getProducts = async() => {
+      try {
+        const response = await axios.get(`${baseUrl}/products`);
+        setProducts(response.data);
+      } catch (error) {
+        console.error(error);
+        toast.error("Failed to fetch products");
+      }
+    }
+    getProducts();
+  }, [baseUrl]);
 
   // Using dummy data instead of API call
-  useEffect(() => {
-    setProducts(Productsdata);  // Setting products from dummy data
-  }, []);
+  // useEffect(() => {
+  //   setProducts(Productsdata);  // Setting products from dummy data
+  // }, []);
 
   const handleFilterChange = (value) => {
     setFilter(value);
@@ -98,7 +98,7 @@ const ProductCard = ({ id, imageSrc, title, price, sku }) => {
     <Card className="p-4 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 mb-4 transition-transform duration-500 ease-in-out transform hover:scale-105 hover:z-50 shadow-lg">
     <Link to={`/product/${id}`}>
       <div className="relative">
-        <div className="block relative h-48 rounded overflow-hidden">  {/* ✅ Replaced <a> with <div> */}
+        <div className="block relative h-48 rounded overflow-hidden"> 
           <img alt="ecommerce" className="object-cover object-center w-full h-full block" src={imageSrc} />
         </div>
       </div>
