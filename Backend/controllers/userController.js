@@ -177,7 +177,7 @@ const updateUsers = async (req, res) => {
   try {
     const { userId } = req.params;
     const filename = req.file.filename;
-    const url = `${req.protocol}://${req.get('host')}/images/${filename}`;
+    const url = `${req.protocol}://${req.get('host')}/uploads/images/${filename}`;
     const user = await User.findById(userId);
     if (!user) {
       return handleErrorResponse(res, 400, 'User not found');

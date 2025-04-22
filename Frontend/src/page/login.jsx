@@ -12,9 +12,13 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { Eye, EyeOff } from "lucide-react";
+
 export default function Login() {
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
   const navigate = useNavigate();
+
+  // To check if the user is already logged in
   useEffect(() => {
     const UserInfo = JSON.parse(localStorage.getItem("userInfo"));
     if (UserInfo?.token) {
@@ -27,6 +31,9 @@ export default function Login() {
     password: "",
   });
 
+  const [showPassword, setShowPassword] = useState(false);
+
+  // Handle form field changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -35,6 +42,7 @@ export default function Login() {
     });
   };
 
+  // Handle form submission
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -50,17 +58,18 @@ export default function Login() {
       );
     }
   };
+
   return (
     <div className="w-full h-screen lg:grid lg:grid-cols-2 lg:gap-x-8">
       <div className="lg:flex justify-center items-center h-full hidden">
         <div>
-        <img
-          src="/images/Logo.png"
-          alt="Logo"
-          width="450"
-          height="310"
-          className="object-cover"
-        />
+          <img
+            src="/images/Logo.png"
+            alt="Logo"
+            width="450"
+            height="310"
+            className="object-cover"
+          />
         </div>
       </div>
 
@@ -82,27 +91,35 @@ export default function Login() {
                   required
                 />
               </div>
-              <div className="grid gap-2">
+
+              <div className="grid gap-2 relative">
                 <Label htmlFor="password" className="text-left">Password</Label>
                 <Input
                   id="password"
                   name="password"
                   onChange={handleChange}
-                  type="password"
+                  type={showPassword ? "text" : "password"}
+                  required
                 />
+             
               </div>
+
               <div className="flex justify-between gap-2 lg:flex text-sm mt-4">
-                <label><input type="checkbox" className="accent-black"></input>Remember me</label> 
-                <Link to="/forgotpasword" className="underline text-black">
-                Forgot Password?
-              </Link>
+                <label>
+                  <input type="checkbox" className="accent-black" /> Remember me
+                </label>
+                <Link to="/forgotpassword" className="underline text-black">
+                  Forgot Password?
+                </Link>
               </div>
-              <Button type="submit" className="w-full text">
+
+              <Button type="submit" className="w-full">
                 Sign in
               </Button>
             </form>
+
             <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{" "}
+              Don't have an account?{" "}
               <Link to="/signup" className="underline text-black">
                 Sign Up
               </Link>
@@ -111,6 +128,5 @@ export default function Login() {
         </Card>
       </div>
     </div>
-
   );
 }

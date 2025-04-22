@@ -10,7 +10,7 @@ const DoctorReview = () => {
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const [doctors, setDoctors] = useState([]);
-  const [open, setOpen] = useState(false);
+
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
@@ -22,51 +22,41 @@ const DoctorReview = () => {
     };
     fetchDoctors();
   }, []);
+
   return (
-    <div className="container mt-4">
-      <div className="flex items-center gap-4">
-        <h1 className="text-xl"> Doctor Reviews</h1>
-        {userInfo.role !== "doctor" && (
-          <div className="ml-auto">
-            <Dialog open={open} onOpenChange={setOpen}>
-              <DialogTrigger asChild>
-                <Button variant="outline">Add Reviews</Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DoctorReviewForm />
-              </DialogContent>
-            </Dialog>
-          </div>
-        )}
+    <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
+      <div className="mb-10 flex items-center justify-between">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          Doctor Reviews
+        </h1>
       </div>
-      <div className="container mt-24">
-        {doctors.map((doctor) => {
-          return (
-            <Link to={`/doctor-reviews/${doctor._id}`} key={doctor._id}>
-              <Card className="p-4 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 mb-4 transition-transform duration-500 ease-in-out transform hover:scale-105 hover:z-50 shadow-lg">
-                <div className="relative">
-                  <a className="block relative h-48 rounded overflow-hidden">
-                    <img
-                      alt="doctor"
-                      className="object-cover object-center w-full h-full block"
-                      src={
-                       doctor.image_url
-                      }
-                    />
-                  </a>
-                </div>
-                <div className="mt-4 flex flex-row justify-between">
-                  <div>
-                    <h2 className="text-gray-900 title-font text-sm font-medium dark:text-white">
-                      {doctor.first_name} {doctor.last_name}
-                    </h2>
-                  </div>
-                  <div></div>
-                </div>
-              </Card>
-            </Link>
-          );
-        })}
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {doctors.map((doctor) => (
+          <Link
+            to={`/doctor-reviews/${doctor._id}`}
+            key={doctor._id}
+            className="transition duration-300 transform hover:scale-105"
+          >
+            <Card className="overflow-hidden rounded-2xl shadow-lg dark:bg-gray-800 hover:shadow-xl">
+              <div className="relative h-48 w-full">
+                <img
+                  src={doctor.image_url}
+                  alt={`${doctor.first_name} ${doctor.last_name}`}
+                  className="object-cover w-full h-full"
+                />
+              </div>
+              <div className="p-4">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  {doctor.first_name} {doctor.last_name}
+                </h2>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Tap to review this doctor
+                </p>
+              </div>
+            </Card>
+          </Link>
+        ))}
       </div>
     </div>
   );

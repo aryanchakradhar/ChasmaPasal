@@ -1,14 +1,14 @@
-import { useContext, useEffect, useState } from "react"
-import { Button } from "./ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
-import { Input } from "./ui/input"
-import { Label } from "./ui/label"
-import axios from "axios"
-import { toast } from "react-toastify"
-import { useNavigate } from "react-router-dom"
-import { Textarea } from "./ui/textarea"
-import { getProduct } from "@/lib/product"
-import { ProductContext } from "@/context/ProductContext"
+import { useContext, useEffect, useState } from "react";
+import { Button } from "./ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { Textarea } from "./ui/textarea";
+import { getProduct } from "@/lib/product";
+import { ProductContext } from "@/context/ProductContext";
 
 const ProductForm = ({ setOpen, getProducts, id }) => {
   const navigate = useNavigate();
@@ -20,20 +20,22 @@ const ProductForm = ({ setOpen, getProducts, id }) => {
     brand: "",
     description: "",
     price: "",
-    image: "",
+    image: null,
     sku: "",
     stock: "",
-  })
+  });
 
-  useEffect(()=>{
-    if(!id) return
-    const getProductData = async()=>{
-      const data = await getProduct(id)
-      setProduct(data)
-    }
-    getProductData()
-  }
-  , [id])
+  const [imagePreview, setImagePreview] = useState(null);
+
+  useEffect(() => {
+    if (!id) return;
+    const getProductData = async () => {
+      const data = await getProduct(id);
+      setProduct({ ...data, image: data.image });
+      setImagePreview(`http://localhost:8080${data.image}`);
+    };
+    getProductData();
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -41,125 +43,166 @@ const ProductForm = ({ setOpen, getProducts, id }) => {
       ...product,
       [name]: value,
     });
-  }
-  const handleSubmit = async(e)=>{
-    e.preventDefault()
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setProduct({ ...product, image: file });
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      if(id){
-        await axios.put(`${baseUrl}/products/${id}`, product);
-        toast.success("Product updated successfully");
-        getProducts()
-        setOpen(false)
-        navigate("/addProducts");
-      }else{
-        await axios.post(`${baseUrl}/products`, product);
-        toast.success("Product created successfully");
-        getProducts()
-        setOpen(false)
-        navigate("/addProducts");
+      const formData = new FormData();
+      formData.append("name", product.name);
+      formData.append("brand", product.brand);
+      formData.append("description", product.description);
+      formData.append("price", product.price);
+      formData.append("sku", product.sku);
+      formData.append("stock", product.stock);
+
+      if (product.image) {
+        formData.append("image", product.image);
       }
-      setProducts([...products, product])
+
+      if (id) {
+        await axios.put(`${baseUrl}/products/${id}`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        toast.success("Product updated successfully");
+      } else {
+        await axios.post(`${baseUrl}/products`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        toast.success("Product created successfully");
+      }
+
+      getProducts();
+      setOpen(false);
+      navigate("/addProducts");
+      setProducts([...products, product]);
     } catch (error) {
       console.error(error);
       toast.error("Product creation failed");
-      setProduct(false)
     }
-  }
+  };
+
   return (
-    <div className="flex items-center justify-center">
-        <Card className="mx-auto max-w-sm">
+    <div className="flex items-center justify-center h-screen">
+    <div className="max-h-[90vh] overflow-y-auto w-full px-4">
+    <Card className="mx-auto max-w-lg p-6 bg-white shadow-xl rounded-lg">
         <CardHeader>
-          <CardTitle className="text-xl">Product Information</CardTitle>
+          <CardTitle className="text-2xl font-semibold text-center">
+            {id ? "Update Product" : "Create Product"}
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit}  className="grid gap-4 w-72">
+          <form onSubmit={handleSubmit} className="grid gap-6">
             <div className="grid gap-2">
-              <Label htmlFor="firstName">Product Name</Label>
+              <Label>Product Name</Label>
               <Input
-                id="name"
                 type="text"
                 onChange={handleChange}
                 value={product.name}
                 name="name"
-                placeholder="eye wear"
+                placeholder="Eye Wear"
                 required
+                className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="lastName">Brand Name</Label>
+              <Label>Brand Name</Label>
               <Input
-                id="brand"
                 type="text"
-                name= "brand"
+                name="brand"
                 onChange={handleChange}
                 value={product.brand}
                 placeholder="Ray Ban"
+                required
+                className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="lastName">SKU</Label>
+              <Label>SKU</Label>
               <Input
-                id="sku"
                 type="text"
-                name= "sku"
+                name="sku"
                 onChange={handleChange}
                 value={product.sku}
                 placeholder="rayban_predator_noir_vert_classique"
+                required
+                className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="contact">Image</Label>
+              <Label>Product Image</Label>
               <Input
-                id="image"
-                type="text"
-                onChange={handleChange}
-                value={product.image}
-                name ="image"
-                placeholder="https://dummyimage.com/400x400"
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                required={!id}
+                className="p-2 border border-gray-300 rounded-md"
               />
+              {imagePreview && (
+                <img
+                  src={imagePreview}
+                  alt="Product Preview"
+                  className="w-full h-32 object-cover rounded-lg mt-2"
+                />
+              )}
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="contact">Price</Label>
+              <Label>Price</Label>
               <Input
-                id="price"
-                type="text"
-                onChange={handleChange}
-                name ="price"
-                value={product.price}
-                placeholder="49"
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="contact">Stock</Label>
-              <Input
-                id="stock"
                 type="number"
                 onChange={handleChange}
-                name ="stock"
-                value={product.stock}
+                name="price"
+                value={product.price}
                 placeholder="49"
+                min="1"
+                required
+                className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="description">Description</Label>
-              <Textarea
-                className="min-h-[100px]"
-                id="description"
-                type="text"
+              <Label>Stock</Label>
+              <Input
+                type="number"
                 onChange={handleChange}
-                name= "description"
-                value={product.description}
-                placeholder="Ray Ban"
+                name="stock"
+                value={product.stock}
+                placeholder="49"
+                min="0"
+                required
+                className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>
-            <Button type="submit" className="w-full">
-              {id?'Update Product': 'Create Product'}
-            </Button>
+            <div className="grid gap-2">
+              <Label>Description</Label>
+              <Textarea
+                className="min-h-[100px] p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                onChange={handleChange}
+                name="description"
+                value={product.description}
+                placeholder="Ray Ban Sunglasses"
+                required
+              />
+            </div>
+            <Button
+                type="submit"
+                className="w-full bg-white text-black border border-gray-300 rounded-md hover:bg-black hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                {id ? "Update Product" : "Create Product"}
+              </Button>
+
           </form>
         </CardContent>
-        </Card>
-      </div>
-  )
-}
+      </Card>
+    </div>
+    </div>
+  );
+};
 
-export default ProductForm
+export default ProductForm;

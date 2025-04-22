@@ -29,10 +29,10 @@ const createAppointment = async (req, res) => {
       const timeDifferenceHr = timeDifferenceMs / (1000 * 60 * 60);
       console.log(timeDifferenceHr, newAppointmentTime, existingAppointmentTime);
       if (timeDifferenceHr < 1) {
-        return res.json({ 
-          status: 400,
+        return res.status(400).json({ 
           success: false,
-          message: 'Appointment already exists within 1 hour. Please change date or time' });
+          message: 'Appointment already exists within 1 hour. Please change date or time' 
+        });
       }
     }
   }
@@ -125,11 +125,55 @@ const deleteAppointment = async (req, res) => {
     }
 };
 
+// Get available slots for a doctor on a specific date
+const getAvailableSlots = async (req, res) => {
+  const { doctorId, date } = req.query;
+  if (!doctorId || !date) {
+    return res.status(400).json({ success: false, message: "Doctor ID and date are required" });
+  }
+
+  try {
+    const allSlots = [
+      "10:00", "11:00", "12:00",
+      "13:00", "14:00", "15:00",
+      "16:00"
+    ];
+
+    const existingAppointments = await Appointment.find({ date, doctor: doctorId });
+
+    const isSlotSafe = (slot) => {
+      const newSlotTime = new Date(`2000-01-01T${slot}:00`);
+      return !existingAppointments.some(app => {
+        const appTime = new Date(`2000-01-01T${app.time}:00`);
+        const diff = Math.abs(appTime - newSlotTime) / (1000 * 60 * 60);
+        return diff < 1;
+      });
+    };
+
+    const availableSlots = allSlots.filter(isSlotSafe);
+    
+    res.json({ 
+      success: true, 
+      data: {
+        availableSlots,
+        allSlots
+      } 
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+  
+};
+
+
+
 module.exports = {
     createAppointment,
     getAppointments,
     getAppointmentsByUser,
     getAppointment,
     updateAppointment,
-    deleteAppointment
+    deleteAppointment,
+    getAvailableSlots,
+
 };

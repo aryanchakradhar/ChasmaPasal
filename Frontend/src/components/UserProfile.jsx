@@ -16,8 +16,6 @@ export default function UserProfile() {
   const { userInfo, setUserInfo } = useContext(UserContext);
   const [open, setOpen] = useState(false);
 
- 
-  
   useEffect(() => {
     // Fetch user info from localStorage if available
     const storedUserInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -41,17 +39,13 @@ export default function UserProfile() {
     }
   }, [baseUrl, userInfo]);
 
-  useEffect(() => {
-    console.log(userInfo); // Check the value of userInfo.file
-  }, [userInfo]);
-
   return (
-    <main className="bg-[#0000] min-h-screen p-4 lg:p-10">
+    <main className="bg-gray-100 min-h-screen p-4 lg:p-10">
       <div>
-        <Card className="shadow-lg">
+        <Card className="shadow-lg border rounded-lg">
           <CardContent>
             <div className="flex flex-col lg:flex-row items-center space-y-4 lg:space-y-0 lg:space-x-8">
-              <div className="w-44 h-44 relative overflow-hidden rounded-full mx-auto lg:mx-0">
+              <div className="w-44 h-44 relative overflow-hidden rounded-full border-4 border-primary mx-auto lg:mx-0 hover:scale-105 transform transition-all duration-300">
                 {/* Display user profile picture */}
                 <img
                   alt="Profile"
@@ -67,26 +61,24 @@ export default function UserProfile() {
 
               <div className="space-y-4">
                 <div>
-                  <h1 className="text-2xl font-bold text-center lg:text-left">
-                    {userInfo.firstName} {userInfo.lastName}
-                  </h1>
+                  <h1 className="text-3xl font-semibold text-center lg:text-left">{userInfo.firstName} {userInfo.lastName}</h1>
 
                   {userInfo.address && (
                     <div className="flex justify-between gap-4">
                       <span className="font-semibold">Address:</span>
-                      <span className="text-gray-500">{userInfo.address}</span>
+                      <span className="text-gray-600">{userInfo.address}</span>
                     </div>
                   )}
 
                   <div className="flex justify-between">
                     <span className="font-semibold">Email:</span>
-                    <span className="text-gray-500">{userInfo.email}</span>
+                    <span className="text-gray-600">{userInfo.email}</span>
                   </div>
 
                   {userInfo.phone && (
                     <div className="flex justify-between">
                       <span className="font-semibold">Phone:</span>
-                      <span className="text-gray-500">{userInfo.phone}</span>
+                      <span className="text-gray-600">{userInfo.phone}</span>
                     </div>
                   )}
                 </div>
@@ -95,7 +87,9 @@ export default function UserProfile() {
               <div className="mt-4 lg:mt-0 lg:ml-auto">
                 <Dialog open={open} onOpenChange={setOpen}>
                   <DialogTrigger asChild>
-                    <Button variant="outline">Edit Profile</Button>
+                    <Button variant="outline" className="hover:bg-primary text-primary hover:text-white">
+                      Edit Profile
+                    </Button>
                   </DialogTrigger>
                   <DialogContent>
                     <UserProfileSetting setOpen={setOpen} />
@@ -109,41 +103,43 @@ export default function UserProfile() {
 
       {/* Appointments Section */}
       <div className="mt-10">
-        <Card>
+        <Card className="shadow-lg">
           <CardContent className="p-4">
-            <h1 className="text-2xl font-bold">Appointments</h1>
-            <div className="flex flex-col gap-4">
+            <h1 className="text-2xl font-semibold mb-4">Appointments</h1>
+            <div className="flex flex-col gap-6">
               {appointments.length > 0 ? (
                 appointments.map((appointment) => (
-                  <div key={appointment._id} className="border p-4 rounded-lg">
-                    <div className="flex justify-between">
+                  <div key={appointment._id} className="border border-gray-300 p-6 rounded-lg shadow-md hover:bg-gray-50 transition-all">
+                    <div className="flex justify-between mb-3">
                       {userInfo.role === "doctor" ? (
                         <div>
                           <span className="font-semibold">Patient:</span>
-                          <span className="text-gray-500 ml-4">
+                          <span className="text-gray-600 ml-4">
                             {appointment.patient.first_name} {appointment.patient.last_name}
                           </span>
                         </div>
                       ) : (
                         <div>
                           <span className="font-semibold">Doctor:</span>
-                          <span className="text-gray-500 ml-4">
+                          <span className="text-gray-600 ml-4">
                             {appointment.doctor.first_name} {appointment.doctor.last_name}
                           </span>
                         </div>
                       )}
                     </div>
-                    <div>
-                      <span className="font-semibold">Date:</span>
-                      <span className="text-gray-500 ml-4">{appointment.date}</span>
+                    <div className="flex justify-between mb-3">
+                      <div>
+                        <span className="font-semibold">Date:</span>
+                        <span className="text-gray-600 ml-4">{appointment.date}</span>
+                      </div>
+                      <div>
+                        <span className="font-semibold">Time:</span>
+                        <span className="text-gray-600 ml-4">{appointment.time}</span>
+                      </div>
                     </div>
-                    <div>
-                      <span className="font-semibold">Time:</span>
-                      <span className="text-gray-500 ml-4">{appointment.time}</span>
-                    </div>
-                    <div>
+                    <div className="flex justify-between">
                       <span className="font-semibold">Status:</span>
-                      <span className="text-gray-500 ml-4">{appointment.status}</span>
+                      <span className="text-gray-600 ml-4">{appointment.status}</span>
                     </div>
                   </div>
                 ))

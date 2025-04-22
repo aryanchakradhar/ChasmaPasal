@@ -15,10 +15,12 @@ export const CartProvider = ({ children }) => {
       productId : item._id,
       quantity : 1
     }
+    console.log("cart data", cartData);
     try {
       const response = await axios.post(`${baseUrl}/cart/${userInfo._id}`,
-        cartData
+        cartData      
       );
+      console.log("response", response);
       setCartItems(response.data.items || []);
       setCartData(response.data || [])
     } catch (error) {
@@ -55,8 +57,10 @@ export const CartProvider = ({ children }) => {
     setCartData(response.data || [])
   };
 
+  const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+
   return (
-    <CartContext.Provider value={{ cartItems, setCartItems, addToCart, decreaseQuantity, removeFromCart, cartData, setCartData }}>
+    <CartContext.Provider value={{ cartItems, setCartItems, addToCart, decreaseQuantity, removeFromCart, cartData, setCartData, cartCount }}>
       {children}
     </CartContext.Provider>
   );

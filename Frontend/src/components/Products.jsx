@@ -2,16 +2,16 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Card } from "./ui/card";
 import { toast } from "react-toastify";
-import axios from "axios"; 
-// import { Productsdata } from "./data/Productsdata";  
+import axios from "axios";
 
 const Products = () => {
   const [filter, setFilter] = useState('');
   const [products, setProducts] = useState([]);
 
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+
   useEffect(() => {
-    const getProducts = async() => {
+    const getProducts = async () => {
       try {
         const response = await axios.get(`${baseUrl}/products`);
         setProducts(response.data);
@@ -19,100 +19,95 @@ const Products = () => {
         console.error(error);
         toast.error("Failed to fetch products");
       }
-    }
+    };
     getProducts();
   }, [baseUrl]);
-
-  // Using dummy data instead of API call
-  // useEffect(() => {
-  //   setProducts(Productsdata);  // Setting products from dummy data
-  // }, []);
 
   const handleFilterChange = (value) => {
     setFilter(value);
   };
 
-  // Sorting logic based on selected filter
   let sortedProducts = [...products];
   sortedProducts.sort((a, b) => {
-    if (filter === 'low-high') {
-      return a.price - b.price;
-    } else if (filter === 'high-low') {
-      return b.price - a.price;
-    } else {
-      return 0;
-    }
+    if (filter === 'low-high') return a.price - b.price;
+    if (filter === 'high-low') return b.price - a.price;
+    return 0;
   });
 
   return (
-    <main className="flex flex-1 flex-col gap-4 lg:gap-6 ">
-      <div className="flex items-center container">
-        <h1 className="text-lg font-semibold dark:text-white md:text-2xl">Browse Our Products</h1>
-      </div>
-      <div className="flex flex-row gap-2 container">
-          <select 
-          className="w-[180px] bg-white dark:bg-black border dark:text-gray-400 border-gray-300 rounded-md shadow-sm px-4 py-2 focus:outline-none focus:ring-2 focus:ring-fuchsia-500"
-          value={filter}  // Control the selected option via value
-          onChange={e => handleFilterChange(e.target.value)}
-        >
-          <option value="new">New</option>
-          <option value="top">Top Rated</option>
-          <option value="featured">Featured</option>
-        </select>
+    <main className="flex flex-col gap-6 p-4 sm:p-6 lg:p-8 bg-gray-50 dark:bg-black min-h-screen">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 container mx-auto">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          Browse Our Products
+        </h1>
+        <div className="flex gap-3 flex-wrap">
+          <select
+            className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-md px-4 py-2 text-sm focus:ring-2 focus:ring-indigo-500"
+            value={filter}
+            onChange={e => handleFilterChange(e.target.value)}
+          >
+            <option value="">Sort by</option>
+            <option value="low-high">Price: Low to High</option>
+            <option value="high-low">Price: High to Low</option>
+          </select>
 
-        <select className="w-[180px] bg-white border dark:bg-black dark:text-gray-400 border-gray-300 rounded-md shadow-sm px-4 py-2 focus:outline-none focus:ring-2 focus:ring-fuchsia-500" value={filter} onChange={e => handleFilterChange(e.target.value)}>
-          <option value="">Price</option>
-          <option value="low-high">Low-High</option>
-          <option value="high-low">High-Low</option>
-        </select>
-        {
-          localStorage.getItem("userInfo") && JSON.parse(localStorage.getItem("userInfo")).role === "admin" &&
-          <Link to={'/addProducts'} className="ml-auto">
-            <button className="text-white bg-gray-500 border-0 focus:outline-none hover:bg-gray-600 rounded p-2">Add Product</button>
-          </Link>
-        }
+          {localStorage.getItem("userInfo") &&
+            JSON.parse(localStorage.getItem("userInfo")).role === "admin" && (
+              <Link to="/addProducts">
+               <button className="bg-white text-black px-4 py-2 rounded-md shadow hover:bg-black hover:text-white text-sm">
+                Add Product
+              </button>
+
+              </Link>
+            )}
+        </div>
       </div>
-      <section className="text-gray-600 body-font dark:text-gray-400">
-        <div className="container">
-          <div className="flex flex-wrap">
-            {sortedProducts.map(product => (
-              <ProductCard
-                key={product._id}
-                id={product._id}
-                imageSrc={product.image}
-                title={product.name}
-                price={product.price}
-                sku={product.sku}
-              />
-            ))}
-          </div>
+
+      <section className="container mx-auto">
+        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {sortedProducts.map((product) => (
+            <ProductCard
+              key={product._id}
+              id={product._id}
+              imageSrc={product.image}
+              title={product.name}
+              price={product.price}
+              sku={product.sku}
+            />
+          ))}
         </div>
       </section>
     </main>
   );
 };
 
-// ProductCard component to display individual products
 const ProductCard = ({ id, imageSrc, title, price, sku }) => {
   return (
-    <Card className="p-4 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 mb-4 transition-transform duration-500 ease-in-out transform hover:scale-105 hover:z-50 shadow-lg">
-    <Link to={`/product/${id}`}>
-      <div className="relative">
-        <div className="block relative h-48 rounded overflow-hidden"> 
-          <img alt="ecommerce" className="object-cover object-center w-full h-full block" src={imageSrc} />
+    <Card className="overflow-hidden rounded-xl shadow-md dark:bg-gray-900 transition-transform transform hover:scale-105">
+      <Link to={`/product/${id}`}>
+        <div className="h-48 w-full overflow-hidden">
+          <img
+            alt={title}
+            src={`http://localhost:8080${imageSrc}`}
+            className="object-cover w-full h-full"
+          />
         </div>
-      </div>
-      <div className="mt-4 flex flex-row justify-between">
-        <h2 className="text-gray-900 text-sm font-medium dark:text-white">{title}</h2>
-        <p className="mt-1 dark:text-gray-300">${price}</p>
-      </div>
-    </Link>
-    <div className="flex gap-1">
-      <Link to={`/try-it-on/${sku}`} className="text-white text-sm bg-gray-500 border-0 focus:outline-none hover:bg-gray-600 rounded p-1">
-        'Try It On'
+        <div className="p-4">
+          <div className="flex justify-between items-center">
+            <h2 className="text-gray-800 dark:text-white font-semibold text-sm truncate">{title}</h2>
+            <p className="text-gray-600 font-semibold text-sm">Rs {price}</p>
+          </div>
+        </div>
       </Link>
-    </div>
-  </Card>  
+      <div className="p-4 pt-0">
+        <Link
+          to={`/try-it-on/${sku}`}
+          className="inline-block w-full text-center bg-black hover:bg-gray-800 hover:text-white text-white py-1.5 text-sm rounded-md"
+        >
+          Try It On
+        </Link>
+      </div>
+    </Card>
   );
 };
 

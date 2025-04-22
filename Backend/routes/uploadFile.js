@@ -1,9 +1,10 @@
-const express = require("express");
-const router = express.Router();
-const { uploadFile } = require("../controllers/uploadFileController");
-const { upload } = require("../config/fileConfig"); // Import multer config
+const express = require('express');
+const { upload } = require('../config/fileConfig');
 
-// Route to upload a file and return the file URL (used for generic file uploads)
-router.post("/", upload.single("file"), uploadFile);
+const { updateUsers } = require('../controllers/userController');
+const router = express.Router();
+
+//Post
+router.route('/users/:userId').post(upload.single('file'), updateUsers);
 
 module.exports = router;

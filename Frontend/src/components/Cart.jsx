@@ -16,6 +16,7 @@ const Cart = () => {
   } = useContext(CartContext);
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
   useEffect(() => {
     if (!userInfo) return;
     const fetchCart = async () => {
@@ -35,42 +36,48 @@ const Cart = () => {
   };
 
   return (
-    <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">Shopping Cart</h2>
+    <div className="p-6 bg-white shadow-lg rounded-lg max-w-4xl mx-auto">
       {cartItems?.length > 0 ? (
         cartItems.map((item, index) => (
-          <div key={index} className="flex justify-between mb-2">
-            <div>
-              <Link to={`/product/${item.product._id}`}>
-                <h3 className="font-bold">{item.product.name}</h3>
-              </Link>
-              <p>Price: ${item.product.price}</p>
-              <div className="flex items-center">
-                <p>Quantity: </p>
+          <div key={index} className="flex justify-between items-center mb-6 p-4 border-b">
+            <div className="flex items-center gap-6">
+              {/* Product Image */}
+              <img
+                src={`http://localhost:8080${item.product.image}`}
+                alt={item.product.name}
+                className="w-20 h-20 object-cover rounded-md"
+              />
+              <div>
+                <Link to={`/product/${item.product._id}`} className="text-xl font-semibold text-gray-800 hover:text-indigo-600">
+                  {item.product.name}
+                </Link>
+                <p className="text-gray-600">Price: Rs {item.product.price}</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              {/* Quantity Control */}
+              <div className="flex items-center gap-2">
                 <button
                   onClick={() => decreaseQuantity(item.product)}
-                  className={`mx-2 bg-red-500 text-white px-2 rounded ${
-                    item.quantity === 1
-                      ? "opacity-50 cursor-not-allowed"
-                      : "opacity-100"
-                  }`}
+                  className={`bg-red-500 text-white px-3 py-1 rounded-full transition duration-300 ease-in-out hover:bg-red-600 ${item.quantity === 1 ? "opacity-50 cursor-not-allowed" : ""}`}
                   disabled={item.quantity === 1}
                 >
                   -
                 </button>
-                <p>{item.quantity}</p>
+                <span className="text-lg font-medium">{item.quantity}</span>
                 <button
                   onClick={() => addToCart(item.product)}
-                  className="mx-2 bg-green-500 text-white px-2 rounded"
+                  className="bg-green-500 text-white px-3 py-1 rounded-full transition duration-300 ease-in-out hover:bg-green-600"
                 >
                   +
                 </button>
               </div>
-            </div>
-            <div>
+
+              {/* Remove Button */}
               <button
                 onClick={() => handleRemove(item.product)}
-                className="bg-red-500 text-white px-2 py-1 rounded"
+                className="bg-red-500 text-white px-4 py-2 rounded-full transition duration-300 ease-in-out hover:bg-red-600"
               >
                 Remove
               </button>
@@ -78,15 +85,19 @@ const Cart = () => {
           </div>
         ))
       ) : (
-        <p>Your cart is empty</p>
+        <p className="text-lg text-gray-600">Your cart is empty</p>
       )}
-      <div className="flex justify-between mt-4">
-        <h2 className="text-xl font-bold">Total</h2>
-        <p>${cartData.bill?.toFixed(2) || 0}</p>
+
+      {/* Total & Checkout Section */}
+      <div className="flex justify-between items-center mt-6 border-t pt-4">
+        <h2 className="text-2xl font-semibold text-gray-800">Total</h2>
+        <p className="text-2xl font-semibold text-gray-800">
+          Rs {cartData.bill?.toFixed(2) || 0}
+        </p>
       </div>
 
-      <Link to="/checkout">
-        <button className="bg-blue-500 text-white px-4 py-2 rounded mt-4">
+      <Link to="/checkout" className="w-full">
+        <button className="w-full mt-6 bg-indigo-600 text-white py-3 rounded-lg transition duration-300 ease-in-out hover:bg-indigo-700">
           Proceed to Checkout
         </button>
       </Link>

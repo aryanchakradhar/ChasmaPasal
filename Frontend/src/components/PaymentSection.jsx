@@ -1,5 +1,5 @@
 
-const PaymentSection = ({setFormData , formData}) => {
+const PaymentSection = ({setFormData , formData,cartData}) => {
   return (
     <div className="mt-6">
       <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">Payment Information</h2>
@@ -30,7 +30,7 @@ const PaymentSection = ({setFormData , formData}) => {
             name="paymentMethod"
             value="card"
             checked={formData.paymentMethod === 'card'}
-            disabled
+            
             onChange={() => setFormData(
               {
                 ...formData,
@@ -39,8 +39,8 @@ const PaymentSection = ({setFormData , formData}) => {
             )}
             className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-700"
           />
-          <label htmlFor="card" className="ml-3 block text-sm font-medium text-gray-400 dark:text-gray-600">
-            Card Payment (Unavailable)
+          <label htmlFor="card" className="ml-3 block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Card Payment
           </label>
         </div>
       </div>
