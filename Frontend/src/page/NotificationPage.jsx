@@ -32,12 +32,27 @@ const NotificationPage = () => {
   }
   }
 
+  const handleClearAll = async () => {
+    try {
+      await fetch(`${baseUrl}/notification/all/${userInfo._id}`, {
+        method: 'DELETE',
+      });
+      setNotifications([]); // clear local state
+    } catch (error) {
+      console.error("Failed to clear notifications", error);
+    }
+  };
+  
   return (
     <div className='container mt-4'>
       <h1 className=' font-bold'>Notifications</h1>
       <Button onClick={handleMarkAllRead} variant="outline">
         Mark all as read
       </Button>
+      <Button onClick={handleClearAll} variant="destructive" className="ml-4">
+        Clear All
+      </Button>
+
       <div className='mt-4 flex flex-col gap-3'>
       {
         notifications? (

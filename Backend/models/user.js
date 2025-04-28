@@ -24,10 +24,18 @@ const userSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
+    medicalLicense: {
+      type: String,
+      required: false,
+    },
+    specialization: {
+      type: String,
+      required: false,
+    },
     image_url:{
       type: String,
       required: false,
-    }
+    } 
 
 });
 

@@ -1,7 +1,9 @@
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { CircleUser, Search, ShoppingCart, Bell } from "lucide-react";
+import { CircleUser, Search, ShoppingCart, Bell} from "lucide-react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+
 import { useContext, useEffect, useState } from "react";
 import {
   DropdownMenu,
@@ -55,6 +57,11 @@ export default function Dashboard() {
     fetchNotifications();
     setUserData(UserInfo);
   }, [navigate, setNotifications]);
+  
+  useEffect(() => {
+    console.log("Updated cart count:", cartCount);
+  }, [cartCount]);
+  
 
   const handleLogout = () => {
     localStorage.removeItem("userInfo");
@@ -238,6 +245,76 @@ export default function Dashboard() {
       <main className="flex-grow w-screen h-full overflow-hidden">
         <Outlet />
       </main>
+    {/* Footer */}
+    <footer className="bg-gray-100 text-gray-700 w-full py-6 border-t">
+        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 text-sm">
+            {/* About ChasmaPasal */}
+            <div>
+              <h3 className="font-semibold text-gray-800 mb-2">About ChasmaPasal</h3>
+              <p className="text-justify">
+              Newmew is your go-to eyewear store in Nepal—cool, stylish, and super easy to shop from. Whether you're heading to the beach or a house party, we’ve got the perfect frames for you. Plus, we deliver for free all over Nepal! Powered by ChasmaPasal, we mix fashion with tech, offering virtual try-ons and smooth eye care services right from your screen.
+              </p>
+            </div>
+
+            {/* Quick Links */}
+            <div>
+              <h3 className="font-semibold text-gray-800 mb-2">Quick Links</h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link to="/privacy-policy" className="text-gray-600 hover:text-black">
+                    Privacy Policy
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/terms" className="text-gray-600 hover:text-black">
+                    Terms of Service
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/contact" className="text-gray-600 hover:text-black">Contact Us</Link>
+                </li>
+              </ul>
+            </div>
+
+
+            {/* Contact Info */}
+            <div>
+              <h3 className="font-semibold text-gray-800 mb-2">Contact Info</h3>
+              <ul className="space-y-2">
+                <li className="flex items-center gap-2"><FontAwesomeIcon icon={['fas', 'envelope']} /> chasmapasal@gmail.com</li>
+                <li className="flex items-center gap-2"><FontAwesomeIcon icon={['fas', 'phone']} /> 01-1234567</li>
+                <li className="flex items-center gap-2"><FontAwesomeIcon icon={['fas', 'mobile-alt']} /> +977-9875684632</li>
+                <li className="flex items-center gap-2"><FontAwesomeIcon icon={['fas', 'map-marker-alt']} /> Kamalpokhari, Kathmandu</li>
+              </ul>
+            </div>
+
+            {/* Social Icons */}
+            <div className="flex flex-col items-center md:items-end justify-center gap-2">
+              <h3 className="font-semibold text-gray-800 mb-2">Follow Us</h3>
+              <div className="flex gap-4 text-3xl">
+                <a href="https://facebook.com" target="_blank" rel="noreferrer" className="hover:text-blue-600">
+                  <FontAwesomeIcon icon={['fab', 'facebook']} className="text-black hover:text-blue-600" />
+                </a>
+                <a href="https://instagram.com" target="_blank" rel="noreferrer" className="hover:text-pink-600">
+                  <FontAwesomeIcon icon={['fab', 'instagram']} className="text-black hover:text-pink-600" />
+                </a>
+                <a href="https://twitter.com" target="_blank" rel="noreferrer" className="hover:text-blue-400">
+                  <FontAwesomeIcon icon={['fab', 'x-twitter']} className="text-black hover:text-blue-400" />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Copyright */}
+          <div className="text-center text-xs mt-6 text-gray-500">
+            © {new Date().getFullYear()} ChasmaPasal. All rights reserved.
+          </div>
+        </div>
+      </footer>
+
+
+
     </div>
   );
 }

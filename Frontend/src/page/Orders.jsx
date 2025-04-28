@@ -9,6 +9,10 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Card } from "@/components/ui/card";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -52,7 +56,7 @@ const Orders = () => {
   const formatDate = (date) => {
     const d = new Date(date);
     return d.toLocaleDateString("en-US", {
-      month: "long",
+      month: "short",
       day: "numeric",
       year: "numeric",
     });
@@ -66,6 +70,9 @@ const Orders = () => {
       const response = await axios.put(`${baseUrl}/orders/${id}`, { status });
       if (response.status === 200) {
         toast.success("Order updated successfully");
+        setOrders(orders.map(order => 
+          order._id === id ? {...order, status} : order
+        ));
       } else {
         toast.error("Failed to update order");
       }
@@ -88,88 +95,154 @@ const Orders = () => {
     }
   };
 
-  return (
-    <div className="px-5 py-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-semibold">Orders</h1>
-        {loading && <div className="text-gray-500">Loading...</div>}
-      </div>
+  const getStatusBadge = (status) => {
+    switch (status) {
+      case 'completed':
+        return <Badge variant="success">{status}</Badge>;
+      case 'cancelled':
+        return <Badge variant="destructive">{status}</Badge>;
+      default:
+        return <Badge variant="secondary">{status}</Badge>;
+    }
+  };
 
-      {orders.length === 0 && !loading ? (
-        <div className="text-center text-lg text-gray-500">No orders available</div>
-      ) : (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Order ID</TableHead>
-              <TableHead>User Name</TableHead>
-              <TableHead className="hidden md:table-cell">Address</TableHead>
-              <TableHead className="hidden md:table-cell">Total Price</TableHead>
-              <TableHead className="hidden md:table-cell">Created At</TableHead>
-              <TableHead className="hidden md:table-cell">Status</TableHead>
-              <TableHead className="hidden md:table-cell">Payment Method</TableHead>
-              <TableHead>Products</TableHead>
-              {userInfo?.role === "admin" && <TableHead>Actions</TableHead>}
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {orders.map((order) => (
-              <TableRow key={order._id} className="hover:bg-gray-100 dark:hover:bg-gray-700">
-                <TableCell>{order._id}</TableCell>
-                <TableCell>{order.shippingAddress.name}</TableCell>
-                <TableCell className="hidden md:table-cell">
-                  {order.shippingAddress.address}
-                </TableCell>
-                <TableCell className="hidden md:table-cell">Rs{order.totalPrice}</TableCell>
-                <TableCell className="hidden md:table-cell">
-                  {formatDate(order.createdAt)}
-                </TableCell>
-                <TableCell>
-                  {userInfo?.role === "admin" ? (
-                    <select
-                      defaultValue={order.status}
-                      className="bg-transparent dark:bg-gray-700 dark:text-white p-2 rounded-md focus:outline-none"
-                      onChange={(e) => setStatus(e.target.value)}
-                    >
-                      <option value="pending">Pending</option>
-                      <option value="completed">Completed</option>
-                      <option value="cancelled">Cancelled</option>
-                    </select>
-                  ) : (
-                    order.status
-                  )}
-                </TableCell>
-                <TableCell className="hidden md:table-cell">{order.paymentMethod}</TableCell>
-                <TableCell>
-                  <ul>
-                    {order.items.map((item) => (
-                      <li key={item._id}>
-                        - {item?.product?.name || "Unknown Product"} ({item.quantity})
-                      </li>
-                    ))}
-                  </ul>
-                </TableCell>
-                {userInfo?.role === "admin" && (
-                  <TableCell className="flex gap-2">
-                    <button
-                      className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
-                      onClick={() => handleUpdate(order._id)}
-                    >
-                      Update
-                    </button>
-                    <button
-                      className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
-                      onClick={() => handleDelete(order._id)}
-                    >
-                      Delete
-                    </button>
-                  </TableCell>
-                )}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      )}
+  return (
+    <div className="px-4 py-6 sm:px-6 lg:px-8">
+      <Card className="p-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Order History</h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-1">
+              {userInfo?.role === "admin" ? "All customer orders" : "Your recent orders"}
+            </p>
+          </div>
+          {loading && (
+            <div className="flex items-center gap-2 text-gray-500">
+              <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-500 rounded-full animate-spin"></div>
+              Loading...
+            </div>
+          )}
+        </div>
+
+        {orders.length === 0 && !loading ? (
+          <div className="text-center py-12">
+            <div className="mx-auto w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-12 w-12 text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                />
+              </svg>
+            </div>
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white">No orders found</h3>
+            <p className="mt-1 text-gray-500 dark:text-gray-400">
+              {userInfo?.role === "admin" 
+                ? "No orders have been placed yet" 
+                : "You haven't placed any orders yet"}
+            </p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <Table className="min-w-full">
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[120px]">Order ID</TableHead>
+                  <TableHead>Customer</TableHead>
+                  <TableHead className="hidden md:table-cell">Amount</TableHead>
+                  <TableHead className="hidden md:table-cell">Date</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="hidden md:table-cell">Payment</TableHead>
+                  <TableHead>Items</TableHead>
+                  {userInfo?.role === "admin" && <TableHead className="text-right">Actions</TableHead>}
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {orders.map((order) => (
+                  <TableRow key={order._id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
+                    <TableCell className="font-medium">
+                      <span className="text-sm text-gray-600 dark:text-gray-300">
+                        #{order._id.slice(-6).toUpperCase()}
+                      </span>
+                    </TableCell>
+                    <TableCell>
+                      <div className="font-medium">{order.shippingAddress.name}</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400 md:hidden">
+                        {order.shippingAddress.address}
+                      </div>
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell font-medium">
+                      Rs {order.totalPrice.toFixed(2)}
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell">
+                      {formatDate(order.createdAt)}
+                    </TableCell>
+                    <TableCell>
+                      {userInfo?.role === "admin" ? (
+                        <div className="flex items-center gap-2">
+                          <Select 
+                            defaultValue={order.status}
+                            onValueChange={(value) => setStatus(value)}
+                          >
+                            <SelectTrigger className="w-[120px]">
+                              <SelectValue placeholder="Status" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="pending">Pending</SelectItem>
+                              <SelectItem value="completed">Completed</SelectItem>
+                              <SelectItem value="cancelled">Cancelled</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      ) : (
+                        getStatusBadge(order.status)
+                      )}
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell capitalize">
+                      {order.paymentMethod}
+                    </TableCell>
+                    <TableCell>
+                      <div className="max-w-[200px] truncate">
+                        {order.items.map((item, index) => (
+                          <div key={index} className="text-sm text-gray-600 dark:text-gray-300">
+                            {item?.product?.name || "Unknown Product"} × {item.quantity}
+                          </div>
+                        ))}
+                      </div>
+                    </TableCell>
+                    {userInfo?.role === "admin" && (
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-2">
+                        <Button 
+                            size="sm" 
+                            onClick={() => handleUpdate(order._id)}
+                          >
+                            Update
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => handleDelete(order._id)}
+                          >
+                            Delete
+                          </Button>
+                        </div>
+                      </TableCell>
+                    )}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
+      </Card>
     </div>
   );
 };

@@ -39,7 +39,9 @@ const registerUser = async (req, res) => {
         last_name: lastName,
         email,
         password,
-         role,
+        role,
+        medicalLicense,
+        specialization
 
       });
 

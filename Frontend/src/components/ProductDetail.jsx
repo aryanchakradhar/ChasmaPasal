@@ -14,9 +14,11 @@ import { CartContext } from '@/context/CartContext';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
+
 const ProductDetail = () => {
   const [isFavourite, setIsFavourite] = useState(false);
   const [data, setData] = useState({});
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const { id } = useParams();
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
   const { addToCart } = useContext(CartContext);
@@ -34,76 +36,101 @@ const ProductDetail = () => {
     getProduct();
   }, [id, baseUrl]);
 
+  const handleAddToCartClick = () => {
+    addToCart(data);
+    setIsCartOpen(true);
+    toast.success(`${data.name} added to cart`);
+  };
+
   const handleFavouriteClick = () => {
     setIsFavourite(!isFavourite);
+    toast.success(isFavourite ? "Removed from favorites" : "Added to favorites");
   };
 
   return (
-    <section className="text-gray-600 body-font dark:text-gray-400 overflow-hidden">
-      <div className="container px-5 py-24 mx-auto">
-        <div className="lg:w-4/5  mx-auto flex flex-wrap">
-          <img
-            alt="ecommerce"
-            className="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded transform transition-all duration-500 hover:scale-105 shadow-lg"
-            src={`http://localhost:8080${data.image}`}
-          />
-        <div className="lg:w-1/2 w-full flex flex-col items-center justify-center text-center min-h-full">
-          <h2 className="text-sm title-font text-gray-500 dark:text-gray-300 tracking-widest">
-            {data.brand}
-          </h2>
-          <h1 className="text-gray-900 text-3xl title-font font-medium mb-1 dark:text-white">
-            {data.name}
-          </h1>
-          <p className="leading-relaxed">{data.description}</p>
+    <section className="text-gray-600 body-font overflow-hidden">
+      <div className="container px-5 py-12 mx-auto mt-15">
+        <div className="lg:w-4/5 mx-auto flex flex-wrap">
+        <img
+          alt={data.name}
+          className="lg:w-1/2 w-full max-h-[500px] object-contain object-center rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:brightness-105"
+          src={`http://localhost:8080${data.image}`}
+        />                
+          <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
+            <h2 className="text-sm title-font text-gray-500 tracking-widest">
+              {data.brand}
+            </h2>
+            <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">
+              {data.name}
+            </h1>
+            <p className="leading-relaxed mb-4 text-justify">{data.description}</p>
 
-          {/* Price & Favorite */}
-          <div className="flex items-center justify-center gap-4 mt-4">
-            <span className="title-font font-medium text-2xl text-gray-900 dark:text-white">
-              Rs{data.price}
-            </span>
-            <button
-              className={`rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ${isFavourite ? 'text-red-500' : 'text-gray-500'}`}
-              onClick={handleFavouriteClick}
-            >
-              <svg
-                fill="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                className="w-5 h-5"
-                viewBox="0 0 24 24"
+            <div className="flex items-center justify-between mb-4">
+              <span className="title-font font-medium text-2xl text-gray-900">
+                Rs {data.price}
+              </span>
+              <button
+                onClick={handleFavouriteClick}
+                className={`rounded-full w-10 h-10 p-0 border-0 inline-flex items-center justify-center ${isFavourite ? 'text-red-500 bg-red-100' : 'text-gray-500 bg-gray-200'}`}
               >
-                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
-              </svg>
-            </button>
-          </div>
+                <svg fill="currentColor" className="w-5 h-5" viewBox="0 0 24 24">
+                  <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
+                </svg>
+              </button>
+            </div>
 
-          {/* Buttons Below */}
-          <div className="flex flex-col mt-6 w-full items-center gap-3">
-            <Link
-              to={`/try-it-on/${data.sku}`}
-              className="w-3/4 hover:text-white text-white bg-black hover:bg-gray-800 border-0 py-2 px-6 focus:outline-none rounded text-center"
-            >
-              Try It On
-            </Link>
-            <Dialog>
-              <DialogTrigger
-                onClick={() => addToCart(data)}
-                className="w-3/4 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-center"
+            <div className="flex flex-col gap-3 mt-6">
+              <Link
+                to={`/try-it-on/${data.sku}`}
+                className="flex-1 text-center text-white bg-black hover:bg-gray-800 py-2 px-6 rounded"
+              >
+                Try It On
+              </Link>
+              <button
+                onClick={handleAddToCartClick}
+                className="flex-1 text-white bg-indigo-500 hover:bg-indigo-600 py-2 px-6 rounded"
               >
                 Add To Cart
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle className="text-2xl font-bold mb-4">Shopping Cart</DialogTitle>
-                  <Cart />
-                </DialogHeader>
-              </DialogContent>
-            </Dialog>
+              </button>
+            </div>
           </div>
         </div>
+      </div>
+    {/* Shipping and Payment Banner */}
+    <div className="bg-gray-100 py-8 mt-12 mb-12">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+          <div className="flex flex-col items-center p-4">
+            <i className="fa-solid fa-wallet text-3xl mb-3 text-black"></i>
+            <h3 className="text-lg font-semibold mb-2">Secure Payment</h3>
+            <p className="text-gray-600">All transactions are encrypted and secure</p>
+          </div>
+          
+          <div className="flex flex-col items-center p-4">
+            <i className="fas fa-shipping-fast text-3xl mb-3 text-black"></i>
+            <h3 className="text-lg font-semibold mb-2">Fast Shipping</h3>
+            <p className="text-gray-600">Fast and reliable delivery all over Nepal.</p>
+          </div>
+          
+          <div className="flex flex-col items-center p-4">
+            <i className="fas fa-undo-alt text-3xl mb-3 text-black"></i>
+            <h3 className="text-lg font-semibold mb-2">Easy Returns</h3>
+            <p className="text-gray-600">30-day return policy for unused items</p>
+          </div>
         </div>
       </div>
+    </div>
+
+
+
+      <Dialog open={isCartOpen} onOpenChange={setIsCartOpen}>
+        <DialogContent className="max-w-4xl p-0">
+          <DialogHeader className="px-6 pt-6">
+            <DialogTitle className="text-2xl font-bold">Shopping Cart</DialogTitle>
+          </DialogHeader>
+          <Cart onClose={() => setIsCartOpen(false)} />
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };

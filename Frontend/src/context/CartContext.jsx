@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { createContext, useState } from 'react';
 import { toast } from 'react-toastify';
+import { useEffect } from 'react';
 
 export const CartContext = createContext();
 let userInfo = JSON.parse(localStorage.getItem('userInfo'));
@@ -8,6 +9,22 @@ let baseUrl = import.meta.env.VITE_APP_BASE_URL;
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [cartData, setCartData] = useState([]);
+
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        if (!userInfo) return;
+        const response = await axios.get(`${baseUrl}/cart/${userInfo._id}`);
+        setCartItems(response.data.items || []);
+        setCartData(response.data || []);
+      } catch (error) {
+        console.error("Failed to fetch cart:", error);
+        toast.error("Failed to load cart data");
+      }
+    };
+
+    fetchCart();
+  }, []);
 
   const addToCart = async (item) => {
     if(!userInfo) return;

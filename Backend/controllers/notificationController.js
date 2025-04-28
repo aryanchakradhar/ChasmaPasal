@@ -72,11 +72,24 @@ const deleteNotification = async (req, res) => {
     }
 
 }
+const deleteAllNotifications = async (req, res) => {
+    const userId = req.params.userId;
+    try {
+      await Notification.deleteMany({ user: userId });
+      res.status(200).json({ message: "All notifications deleted" });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Failed to delete notifications" });
+    }
+  };
+  
 
-module.exports = {
+  module.exports = {
     createNotification,
     getUserNotifications,
     markNotificationAsRead,
     deleteNotification,
-    markAllNotificationAsRead
+    markAllNotificationAsRead,
+    deleteAllNotifications, 
 };
+
