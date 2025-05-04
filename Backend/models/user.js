@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema({
@@ -32,16 +32,36 @@ const userSchema = new mongoose.Schema({
       type: String,
       required: false,
     },
-    image_url:{
+    image_url: {
       type: String,
       required: false,
-    } 
-
+    },
+    verifyOtp: {
+      type: String,
+      default: '',
+    },
+    verifyOtpExpireAt: {
+      type: Number,
+      default: 0,
+    },
+    isAccountVerified: {
+      type: Boolean,
+      default: false,
+    },
+    resetOtp: {
+      type: String,
+      default: '',
+    },
+    resetOtpExpireAt: {
+      type: Number,
+      default: 0,
+    }
 });
 
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
+
 userSchema.pre("save", async function (next) {
   if (!this.isModified('password')) {
     next();

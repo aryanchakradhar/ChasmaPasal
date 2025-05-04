@@ -6,6 +6,7 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const bodyParser = require('body-parser');
 const path = require('path');
+const cookieParser = require('cookie-parser');
 
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 const userRoute = require("./routes/user");
@@ -17,8 +18,8 @@ const orderRoute = require("./routes/order");
 const reviewRoute = require("./routes/review");
 const notificationRoute = require("./routes/notification");
 const paymentRoute = require("./routes/payment");
-// const payment = require('./routes/PaymentRoute')
 
+dotenv.config();
 const app = express()
 app.use("/uploads/images/", express.static(path.join(__dirname, "/uploads/images/")));
 const corsOptions = {
@@ -27,11 +28,12 @@ const corsOptions = {
   preflightContinue: false,
   optionsSuccessStatus: 204,
 };
-dotenv.config();
-app.use(express.json())
+
+app.use(express.json());
 app.use(helmet());
 app.use(cors(corsOptions));
-app.use(bodyParser.json())
+app.use(bodyParser.json());
+app.use(cookieParser());
 
 //routes
 app.use("/api/user", userRoute);
@@ -43,7 +45,7 @@ app.use('/api/orders', orderRoute);
 app.use('/api/notification', notificationRoute);
 app.use('/api/review', reviewRoute);
 app.use('/api/khalti', paymentRoute);
-// app.use('/api/khalti', payment);
+
 
 
 //error middlewares
