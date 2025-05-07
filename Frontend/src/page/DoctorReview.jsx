@@ -60,7 +60,7 @@ const DoctorReview = () => {
             <Card className="overflow-hidden rounded-2xl shadow-lg dark:bg-gray-800 hover:shadow-xl border border-gray-200 dark:border-gray-700 h-full flex flex-col">
               <div className="relative h-56 w-full group">
                 <img
-                  src={doctor.image_url || "/images/doctor-placeholder.jpg"}
+                  src={doctor.image_url || "/images/altdoc.png"}
                   alt={`${doctor.first_name} ${doctor.last_name}`}
                   className="object-cover w-full h-full transition duration-500 group-hover:scale-105"
                 />
