@@ -2,29 +2,40 @@ const mongoose = require("mongoose");
 
 const paymentSchema = new mongoose.Schema(
   {
-    transactionId: { type: String, unique: true },
-    pidx: { type: String, unique: true },
+    transactionId: {
+      type: String,
+      default: null,
+      index: {
+        unique: true,
+        partialFilterExpression: { transactionId: { $type: "string" } },
+      },
+    },
+    pidx: {
+      type: String,
+      unique: true,
+    },
     orderId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "order",
       required: true,
+      index: true,
     },
     amount: { type: Number, required: true },
-    dataFromVerificationReq: { type: Object },
-    apiQueryFromUser: { type: Object },
     paymentGateway: {
       type: String,
-      enum: ["cod", "card"],
+      enum: ["cod", "khalti", "card"],
       required: true,
     },
     status: {
       type: String,
       enum: ["success", "pending", "failed"],
       default: "pending",
+      index: true,
     },
-    paymentDate: { type: Date, default: Date.now },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
-const Payment = mongoose.model("payment", paymentSchema);
-module.exports = Payment;
+
+module.exports = mongoose.model("Payment", paymentSchema);

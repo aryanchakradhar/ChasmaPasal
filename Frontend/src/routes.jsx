@@ -14,12 +14,14 @@ import AboutUs from "./page/AboutUs";
 import Checkout from "./page/Checkout";
 import OrderSuccess from "./page/OrderSuccess";
 import Orders from "./page/Orders";
+import OrderStatus from "./page/OrderStatus";
 import UserProfile from "./components/UserProfile";
 import DoctorReview from "./page/DoctorReview";
 import PerDoctorReviews from "./components/PerDoctorReviews";
 import AppCanvas from "./page/AppCanvas";
 import NotificationPage from "./page/NotificationPage";
 import { AddDoctor } from "./page/AddDoctor";
+import ForgotPassword from "./page/Forgotpassword";
   
 export const router = createBrowserRouter([
     {
@@ -31,6 +33,12 @@ export const router = createBrowserRouter([
       path: "/signup",
       element: <Signup />,
       errorElement: <ErrorPage />,
+    },
+    {
+      path: "/forgotpassword",
+      element: <ForgotPassword />,
+      errorElement: <ErrorPage />,
+
     },
     {
         path: "/",
@@ -72,6 +80,10 @@ export const router = createBrowserRouter([
           {
             path: 'orders',
             element: <Orders/>
+          },
+          {
+            path: '/orderstatus',
+            element: <OrderStatus />
           },
           {
             path: 'user',
