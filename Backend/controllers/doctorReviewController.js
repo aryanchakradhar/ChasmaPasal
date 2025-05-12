@@ -83,11 +83,21 @@ const deleteReview = async (req, res) => {
     }
 };
 
+const getReviewCount = async (req, res) => {
+    try {
+      const count = await Review.countDocuments();
+      res.json({ count });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
+
 module.exports = {
     getReviews,
     getDoctorReviews,
     updateReview,
     deleteReview,
     addReview,
-    getPatientReviews
+    getPatientReviews,
+    getReviewCount,
 }

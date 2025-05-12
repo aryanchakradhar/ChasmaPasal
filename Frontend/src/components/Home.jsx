@@ -19,8 +19,10 @@ const Home = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (UserInfo?.role === "doctor") {
-      navigate("/user");
+    if (UserInfo?.role === "admin") {
+      navigate("/AdminHome"); // Redirect admin to AdminHomepage
+    } else if (UserInfo?.role === "doctor") {
+      navigate("/user"); // Redirect doctor to their user page
     }
   }, [UserInfo, navigate]);
 

@@ -200,6 +200,16 @@ const clearPastAppointments = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+const getAppointmentCount = async (req, res) => {
+  try {
+    const count = await Appointment.countDocuments();
+    res.json({ count });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+
 
 // Then add it to your exports (keep all existing exports and just add this one)
 module.exports = {
@@ -210,5 +220,6 @@ module.exports = {
   updateAppointment,
   deleteAppointment,
   getAvailableSlots,
-  clearPastAppointments // Add this line
+  clearPastAppointments,
+  getAppointmentCount,
 };

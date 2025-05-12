@@ -106,10 +106,20 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+const getProductCount = async (req, res) => {
+  try {
+    const count = await Product.countDocuments();
+    res.json({ count });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getProducts,
   getProductById,
   createProduct,
   updateProduct,
   deleteProduct,
+  getProductCount,
 };

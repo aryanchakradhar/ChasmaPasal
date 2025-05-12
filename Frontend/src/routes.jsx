@@ -22,6 +22,7 @@ import AppCanvas from "./page/AppCanvas";
 import NotificationPage from "./page/NotificationPage";
 import { AddDoctor } from "./page/AddDoctor";
 import ForgotPassword from "./page/Forgotpassword";
+import AdminHome from "./components/AdminHome";
   
 export const router = createBrowserRouter([
     {
@@ -48,6 +49,10 @@ export const router = createBrowserRouter([
           {
             path: '',
             element: <Home/>
+          },
+          {
+            path: 'AdminHome',
+            element: <AdminHome/>
           },
           {
             path: 'appointmentform',

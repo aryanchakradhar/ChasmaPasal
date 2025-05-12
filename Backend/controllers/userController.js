@@ -356,6 +356,27 @@ const resetPassword = async (req, res) => {
   }
 };
 
+// Get total count of all users
+const getUserCount = async (req, res) => {
+  try {
+    const userCount = await User.countDocuments();
+    res.json({ count: userCount });
+  } catch (error) {
+    handleErrorResponse(res, 500, error.message);
+  }
+};
+
+// Get total count of doctors only
+const getDoctorCount = async (req, res) => {
+  try {
+    const doctorCount = await User.countDocuments({ role: "doctor" });
+    res.json({ count: doctorCount });
+  } catch (error) {
+    handleErrorResponse(res, 500, error.message);
+  }
+};
+
+
 module.exports = {
   registerUser,
   authUser,
@@ -368,5 +389,7 @@ module.exports = {
   sendVerifyOtp,
   verifyEmail,
   sendResetOtp,
-  resetPassword
+  resetPassword,
+  getUserCount,
+  getDoctorCount,
 };

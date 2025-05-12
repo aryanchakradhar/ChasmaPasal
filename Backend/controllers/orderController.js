@@ -80,10 +80,20 @@ const deleteOrder = async (req, res) => {
   }
 };
 
+const getOrderCount = async (req, res) => {
+  try {
+    const count = await Order.countDocuments();
+    res.json({ count });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createOrder,
   getOrders,
   updateOrder,
   getAllOrders,
   deleteOrder,
+  getOrderCount,
 };

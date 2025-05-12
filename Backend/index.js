@@ -18,6 +18,7 @@ const orderRoute = require("./routes/order");
 const reviewRoute = require("./routes/review");
 const notificationRoute = require("./routes/notification");
 const paymentRoute = require("./routes/payment");
+const adminRoutes = require("./routes/adminRoutes");
 
 dotenv.config();
 const app = express();
@@ -48,6 +49,7 @@ app.use("/api/orders", orderRoute);
 app.use("/api/notification", notificationRoute);
 app.use("/api/review", reviewRoute);
 app.use("/api/khalti", paymentRoute);
+app.use("/api/count", adminRoutes);
 
 //error middlewares
 app.use(notFound);
