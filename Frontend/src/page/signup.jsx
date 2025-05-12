@@ -11,7 +11,6 @@ export default function Signup() {
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
   const navigate = useNavigate();
 
-  // State variables
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -23,8 +22,8 @@ export default function Signup() {
   const [showOtpForm, setShowOtpForm] = useState(false);
   const [otp, setOtp] = useState("");
   const [userId, setUserId] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // Check if user is already logged in
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     if (userInfo?.token) {
@@ -32,41 +31,42 @@ export default function Signup() {
     }
   }, [navigate]);
 
-  // Handle form data changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  // Handle sign-up form submission
   const handleSignUp = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match!");
       return;
     }
+    if (formData.password.length < 6) {
+      toast.error("Password should be at least 6 characters.");
+      return;
+    }
 
     try {
+      setLoading(true);
       const { data } = await axios.post(`${baseUrl}/user/register`, formData);
-      console.log(data);
       toast.success("Account created. Please verify your email.");
       setUserId(data._id);
 
-      // Send OTP for email verification
       await axios.post(`${baseUrl}/user/send-verify-otp`, { userId: data._id });
 
       setShowOtpForm(true);
     } catch (error) {
-      console.error(error);
       toast.error(error.response?.data?.message || "Signup failed");
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Handle OTP form submission
   const handleOtpSubmit = async (e) => {
     e.preventDefault();
-
     try {
+      setLoading(true);
       const { data } = await axios.post(`${baseUrl}/user/verify-email`, { userId, otp });
 
       if (data.success) {
@@ -82,6 +82,17 @@ export default function Signup() {
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "OTP verification failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    try {
+      await axios.post(`${baseUrl}/user/send-verify-otp`, { userId });
+      toast.success("OTP resent successfully");
+    } catch (error) {
+      toast.error("Failed to resend OTP");
     }
   };
 
@@ -101,7 +112,6 @@ export default function Signup() {
           </CardHeader>
 
           <CardContent>
-            {/* Conditional rendering for sign-up and OTP form */}
             {!showOtpForm ? (
               <form onSubmit={handleSignUp} className="grid gap-4">
                 <div className="grid gap-2 text-left">
@@ -160,7 +170,9 @@ export default function Signup() {
                     required
                   />
                 </div>
-                <Button type="submit" className="w-full">Create an account</Button>
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? "Creating Account..." : "Create Account"}
+                </Button>
               </form>
             ) : (
               <form onSubmit={handleOtpSubmit} className="grid gap-4">
@@ -175,11 +187,24 @@ export default function Signup() {
                     required
                   />
                 </div>
-                <Button type="submit" className="w-full">Verify Email</Button>
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? "Verifying..." : "Verify"}
+                </Button>
+
+                {/* Resend OTP Option */}
+                <p className="text-sm text-center text-gray-600 mt-2">
+                  Didn’t get the code?{" "}
+                  <button
+                    type="button"
+                    onClick={handleResendOtp}
+                    className="underline text-blue-600 hover:text-blue-800"
+                  >
+                    Resend OTP
+                  </button>
+                </p>
               </form>
             )}
 
-            {/* Links for alternative actions */}
             {!showOtpForm && (
               <>
                 <div className="relative flex py-5 items-center">
