@@ -28,21 +28,30 @@ export default function UserProfile() {
   }, [setUserInfo]);
 
   useEffect(() => {
-    if (userInfo && userInfo._id) {
-      const fetchAppointments = async () => {
-        try {
-          setLoading(true);
-          const response = await axios.get(`${baseUrl}/appointment/${userInfo._id}`);
-          setAppointments(response.data.data || []);
-        } catch (error) {
-          console.error(error);
-        } finally {
-          setLoading(false);
+    const fetchAppointments = async () => {
+      try {
+        setLoading(true);
+        let response;
+  
+        if (userInfo?.role === "admin") {
+          response = await axios.get(`${baseUrl}/appointment`);
+        } else {
+          response = await axios.get(`${baseUrl}/appointment/${userInfo._id}`);
         }
-      };
+  
+        setAppointments(response.data.data || []);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    if (userInfo && userInfo._id) {
       fetchAppointments();
     }
   }, [baseUrl, userInfo]);
+  
 
   const getStatusBadge = (status) => {
     if (!status) {
@@ -229,14 +238,39 @@ export default function UserProfile() {
                             <div className="flex items-center gap-3">
                               <User className="h-5 w-5 text-gray-500 dark:text-gray-400" />
                               <div>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">
-                                  {userInfo?.role === "doctor" ? "Patient" : "Doctor"}
-                                </p>
-                                <p className="font-medium text-gray-900 dark:text-white">
-                                  {userInfo?.role === "doctor"
-                                    ? `${appointment.patient.first_name} ${appointment.patient.last_name}`
-                                    : `${appointment.doctor.first_name} ${appointment.doctor.last_name}`}
-                                </p>
+                              {userInfo?.role === "admin" ? (
+                                  <>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">Patient</p>
+                                    <p className="font-medium text-gray-900 dark:text-white">
+                                      {appointment?.patient?.first_name && appointment?.patient?.last_name
+                                        ? `${appointment.patient.first_name} ${appointment.patient.last_name}`
+                                        : "Patient info unavailable"}
+                                    </p>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Doctor</p>
+                                    <p className="font-medium text-gray-900 dark:text-white">
+                                      {appointment?.doctor?.first_name && appointment?.doctor?.last_name
+                                        ? `${appointment.doctor.first_name} ${appointment.doctor.last_name}`
+                                        : "Doctor info unavailable"}
+                                    </p>
+                                  </>
+                                ) : (
+                                  <>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                      {userInfo?.role === "doctor" ? "Patient" : "Doctor"}
+                                    </p>
+                                    <p className="font-medium text-gray-900 dark:text-white">
+                                      {userInfo?.role === "doctor"
+                                        ? appointment?.patient?.first_name && appointment?.patient?.last_name
+                                          ? `${appointment.patient.first_name} ${appointment.patient.last_name}`
+                                          : "Patient info unavailable"
+                                        : appointment?.doctor?.first_name && appointment?.doctor?.last_name
+                                          ? `${appointment.doctor.first_name} ${appointment.doctor.last_name}`
+                                          : "Doctor info unavailable"}
+                                    </p>
+                                  </>
+                                )}
+
+
                               </div>
                             </div>
 

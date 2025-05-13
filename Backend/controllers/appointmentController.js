@@ -64,7 +64,9 @@
   // Get all appointments
   const getAppointments = async (req, res) => {
       try {
-          const appointments = await Appointment.find({});
+          const appointments = await Appointment.find({})
+          .populate('doctor', 'first_name last_name')
+          .populate('patient', 'first_name last_name');
           res.json({ success: true, data: appointments });
       } catch (error) {
           res.status(500).json({ success: false, message: error.message });

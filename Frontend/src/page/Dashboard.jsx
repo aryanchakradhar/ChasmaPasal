@@ -86,11 +86,13 @@ export default function Dashboard() {
             <Link to="/AppointmentForm" className="text-black hover:text-gray-600">Appointments</Link>
           )}
           <Link to="/doctor-reviews" className="text-black hover:text-gray-600">Reviews</Link>
-          {userData.role === "admin" && (
-            <>
-              <Link to="/orders" className="text-black hover:text-gray-600">Orders</Link>
-              <Link to="/add-doctor" className="text-black hover:text-gray-600">Doctor</Link>
-            </>
+          {(userData.role === "admin" || userData.role === "user") && (
+            <Link to="/orders" className="text-black hover:text-gray-600">
+              Orders
+            </Link>
+          )}
+         {userData.role === "admin" && (
+          <Link to="/add-doctor" className="text-black hover:text-gray-600">Doctor</Link>
           )}
           <Link to="/user" className="text-black hover:text-gray-600">Profile</Link>
           <Link to="/aboutus" className="text-black hover:text-gray-600">About Us</Link>
