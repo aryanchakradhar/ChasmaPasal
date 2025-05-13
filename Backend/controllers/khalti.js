@@ -132,7 +132,7 @@ const initializeKhaltiPayment = async (req, res) => {
 
 const verifyKhaltiPayment = async (req, res) => {
   try {
-    const { pidx, orderResponse } = req.body;
+    const { pidx, orderResponse, orderId } = req.body;
 
     if (!pidx) {
       return res.status(400).json({
@@ -149,10 +149,10 @@ const verifyKhaltiPayment = async (req, res) => {
 
     console.log("Payment verification response:", verification);
 
-    const { status, transaction_id, purchase_order_id } = verification.data;
+    const { status, transaction_id } = verification.data;
 
     if (status !== "Completed") {
-      await Order.findByIdAndUpdate(purchase_order_id, {
+      await Order.findByIdAndUpdate(orderId, {
         status: "failed",
         paymentStatus: "failed",
       });
@@ -162,14 +162,14 @@ const verifyKhaltiPayment = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: `Payment not completed. Status: ${status}`,
-        orderId: purchase_order_id,
+        orderId: orderId,
       });
     }
 
     // Process successful payment
     await Promise.all([
       Order.findByIdAndUpdate(
-        purchase_order_id,
+        orderId,
         {
           status: "completed",
           paymentStatus: "paid",

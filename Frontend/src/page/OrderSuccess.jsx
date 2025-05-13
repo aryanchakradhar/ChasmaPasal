@@ -13,19 +13,6 @@ const OrderSuccess = () => {
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
-  useEffect(() => {
-    const clearCart = async () => {
-      try {
-        await axios.put(`${baseUrl}/cart/clear/${userInfo._id}`);
-      } catch (error) {
-        console.error("Failed to clear cart:", error);
-      }
-    };
-
-    if (verified && order) {
-      clearCart();
-    }
-  }, [verified, order, baseUrl, userInfo?._id]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -70,6 +57,7 @@ const OrderSuccess = () => {
         const response = await axios.post(`${baseUrl}/khalti/verify`, {
           pidx,
           orderResponse,
+          orderId,
         });
         console.log("Verification response:", response);
         if (response.data.success) {

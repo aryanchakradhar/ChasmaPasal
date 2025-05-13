@@ -199,6 +199,28 @@ const updateUsers = async (req, res) => {
   }
 };
 
+const deleteDoctor = async (req, res) => {
+  try {
+    const { doctorId } = req.params;
+
+    const doctor = await User.findById(doctorId);
+    if (!doctor) {
+      return handleErrorResponse(res, 404, 'Doctor not found');
+    }
+
+    if (doctor.role !== 'doctor') {
+      return handleErrorResponse(res, 403, 'Cannot delete non-doctor user');
+    }
+
+    await doctor.deleteOne();
+
+    res.json({ success: true, message: 'Doctor deleted successfully' });
+  } catch (error) {
+    handleErrorResponse(res, 500, error.message);
+  }
+};
+
+
 const sendVerifyOtp = async (req, res) => {
   try {
     const { userId } = req.body;
@@ -386,6 +408,7 @@ module.exports = {
   isAdmin,
   getAllDoctors,
   updateUsers,
+  deleteDoctor,
   sendVerifyOtp,
   verifyEmail,
   sendResetOtp,

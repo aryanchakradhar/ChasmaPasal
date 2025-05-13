@@ -11,14 +11,20 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-  const [status, setStatus] = useState();
+  const [statusMap, setStatusMap] = useState({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -63,21 +69,27 @@ const Orders = () => {
   };
 
   const handleUpdate = async (id) => {
-    if (!status) {
+    const selectedStatus = statusMap[id];
+    if (!selectedStatus) {
       return toast.error("Please select a status");
     }
+
     try {
-      const response = await axios.put(`${baseUrl}/orders/${id}`, { status });
+      const response = await axios.put(`${baseUrl}/orders/${id}`, {
+        status: selectedStatus,
+      });
       if (response.status === 200) {
         toast.success("Order updated successfully");
-        setOrders(orders.map(order => 
-          order._id === id ? {...order, status} : order
-        ));
+        setOrders((prevOrders) =>
+          prevOrders.map((order) =>
+            order._id === id ? { ...order, status: selectedStatus } : order
+          )
+        );
       } else {
         toast.error("Failed to update order");
       }
     } catch (error) {
-      toast.error(error);
+      toast.error("Error updating order");
     }
   };
 
@@ -91,15 +103,15 @@ const Orders = () => {
         toast.error("Failed to delete order");
       }
     } catch (error) {
-      toast.error(error);
+      toast.error("Error deleting order");
     }
   };
 
   const getStatusBadge = (status) => {
     switch (status) {
-      case 'completed':
+      case "completed":
         return <Badge variant="success">{status}</Badge>;
-      case 'cancelled':
+      case "cancelled":
         return <Badge variant="destructive">{status}</Badge>;
       default:
         return <Badge variant="secondary">{status}</Badge>;
@@ -111,9 +123,13 @@ const Orders = () => {
       <Card className="p-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Order History</h1>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+              Order History
+            </h1>
             <p className="text-gray-600 dark:text-gray-400 mt-1">
-              {userInfo?.role === "admin" ? "All customer orders" : "Your recent orders"}
+              {userInfo?.role === "admin"
+                ? "All customer orders"
+                : "Your recent orders"}
             </p>
           </div>
           {loading && (
@@ -142,10 +158,12 @@ const Orders = () => {
                 />
               </svg>
             </div>
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white">No orders found</h3>
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+              No orders found
+            </h3>
             <p className="mt-1 text-gray-500 dark:text-gray-400">
-              {userInfo?.role === "admin" 
-                ? "No orders have been placed yet" 
+              {userInfo?.role === "admin"
+                ? "No orders have been placed yet"
                 : "You haven't placed any orders yet"}
             </p>
           </div>
@@ -161,12 +179,17 @@ const Orders = () => {
                   <TableHead>Status</TableHead>
                   <TableHead className="hidden md:table-cell">Payment</TableHead>
                   <TableHead>Items</TableHead>
-                  {userInfo?.role === "admin" && <TableHead className="text-right">Actions</TableHead>}
+                  {userInfo?.role === "admin" && (
+                    <TableHead className="text-right">Actions</TableHead>
+                  )}
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {orders.map((order) => (
-                  <TableRow key={order._id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
+                  <TableRow
+                    key={order._id}
+                    className="hover:bg-gray-50 dark:hover:bg-gray-800"
+                  >
                     <TableCell className="font-medium">
                       <span className="text-sm text-gray-600 dark:text-gray-300">
                         #{order._id.slice(-6).toUpperCase()}
@@ -186,21 +209,21 @@ const Orders = () => {
                     </TableCell>
                     <TableCell>
                       {userInfo?.role === "admin" ? (
-                        <div className="flex items-center gap-2">
-                          <Select 
-                            defaultValue={order.status}
-                            onValueChange={(value) => setStatus(value)}
-                          >
-                            <SelectTrigger className="w-[120px]">
-                              <SelectValue placeholder="Status" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="pending">Pending</SelectItem>
-                              <SelectItem value="completed">Completed</SelectItem>
-                              <SelectItem value="cancelled">Cancelled</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
+                        <Select
+                          defaultValue={order.status}
+                          onValueChange={(value) =>
+                            setStatusMap({ ...statusMap, [order._id]: value })
+                          }
+                        >
+                          <SelectTrigger className="w-[120px]">
+                            <SelectValue placeholder="Status" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="pending">Pending</SelectItem>
+                            <SelectItem value="completed">Completed</SelectItem>
+                            <SelectItem value="cancelled">Cancelled</SelectItem>
+                          </SelectContent>
+                        </Select>
                       ) : (
                         getStatusBadge(order.status)
                       )}
@@ -211,8 +234,12 @@ const Orders = () => {
                     <TableCell>
                       <div className="max-w-[200px] truncate">
                         {order.items.map((item, index) => (
-                          <div key={index} className="text-sm text-gray-600 dark:text-gray-300">
-                            {item?.product?.name || "Unknown Product"} × {item.quantity}
+                          <div
+                            key={index}
+                            className="text-sm text-gray-600 dark:text-gray-300"
+                          >
+                            {item?.product?.name || "Unknown Product"} ×{" "}
+                            {item.quantity}
                           </div>
                         ))}
                       </div>
@@ -220,8 +247,8 @@ const Orders = () => {
                     {userInfo?.role === "admin" && (
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
-                        <Button 
-                            size="sm" 
+                          <Button
+                            size="sm"
                             onClick={() => handleUpdate(order._id)}
                           >
                             Update

@@ -69,7 +69,6 @@ const Checkout = () => {
       const response = await axios.post(`${baseUrl}/orders`, orderData);
       if (response.status === 200) {
         // Clear cart for COD orders
-        await axios.put(`${baseUrl}/cart/clear/${userInfo._id}`);
         setCartData({ items: [], bill: 0 });
 
         if (formData.paymentMethod === "cod") {
