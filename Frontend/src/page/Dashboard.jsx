@@ -82,14 +82,14 @@ export default function Dashboard() {
             <Link to="/" className="text-black hover:text-gray-600">Home</Link>
           )}
           <Link to="/products" className="text-black hover:text-gray-600">AR Glasses</Link>
-          {userData.role !== "doctor" && (
+          {userData.role !== "doctor" && userData.role !== "admin" &&(
             <Link to="/AppointmentForm" className="text-black hover:text-gray-600">Appointments</Link>
           )}
           <Link to="/doctor-reviews" className="text-black hover:text-gray-600">Reviews</Link>
           {userData.role === "admin" && (
             <>
               <Link to="/orders" className="text-black hover:text-gray-600">Orders</Link>
-              <Link to="/add-doctor" className="text-black hover:text-gray-600">Add Doctor</Link>
+              <Link to="/add-doctor" className="text-black hover:text-gray-600">Doctor</Link>
             </>
           )}
           <Link to="/user" className="text-black hover:text-gray-600">Profile</Link>
@@ -97,8 +97,9 @@ export default function Dashboard() {
         </nav>
 
         {/* Actions */}
-        <div className="flex items-center gap-6 relative">
+                <div className="flex items-center gap-6 relative">
           {/* Notifications */}
+          {userData.role === "admin" &&  userData.role === "user" &&(
           <div className="relative" ref={dropdownRef}>
             <button onClick={() => setShowNotifications(prev => !prev)} className="relative">
               <Bell className="h-5 w-5 text-black" />
@@ -117,7 +118,7 @@ export default function Dashboard() {
               </div>
             )}
           </div>
-
+            )}
           {/* Cart */}
           <Sheet>
             <SheetTrigger asChild>

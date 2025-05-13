@@ -185,19 +185,47 @@ const getAllDoctors = async (req, res) => {
 const updateUsers = async (req, res) => {
   try {
     const { userId } = req.params;
-    const filename = req.file.filename;
-    const url = `${req.protocol}://${req.get('host')}/uploads/images/${filename}`;
+    const { firstName, lastName, specialization } = req.body;
+
     const user = await User.findById(userId);
     if (!user) {
       return handleErrorResponse(res, 400, 'User not found');
     }
-    user.image_url = url || user.image_url;
+
+    // Only allow updating name and specialization if doctor
+    if (user.role === 'doctor') {
+      user.first_name = firstName || user.first_name;
+      user.last_name = lastName || user.last_name;
+      user.specialization = specialization || user.specialization;
+    } else {
+      // For other roles, only allow name update
+      user.first_name = firstName || user.first_name;
+      user.last_name = lastName || user.last_name;
+    }
+
+    // Handle image upload if file is provided
+    if (req.file && req.file.filename) {
+      const filename = req.file.filename;
+      const url = `${req.protocol}://${req.get('host')}/uploads/images/${filename}`;
+      user.image_url = url;
+    }
+
     const updatedUser = await user.save();
-    res.json(updatedUser);
+
+    res.json({
+      _id: updatedUser._id,
+      firstName: updatedUser.first_name,
+      lastName: updatedUser.last_name,
+      specialization: updatedUser.specialization || '',
+      image_url: updatedUser.image_url,
+      role: updatedUser.role,
+      email: updatedUser.email,
+    });
   } catch (err) {
     handleErrorResponse(res, 400, err.message || 'User Update Failed');
   }
 };
+
 
 const deleteDoctor = async (req, res) => {
   try {

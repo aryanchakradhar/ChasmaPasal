@@ -20,7 +20,7 @@ import DoctorReview from "./page/DoctorReview";
 import PerDoctorReviews from "./components/PerDoctorReviews";
 import AppCanvas from "./page/AppCanvas";
 import NotificationPage from "./page/NotificationPage";
-import { AddDoctor } from "./page/AddDoctor";
+import AddDoctor  from "./page/AddDoctor";
 import ForgotPassword from "./page/Forgotpassword";
 import AdminHome from "./components/AdminHome";
   

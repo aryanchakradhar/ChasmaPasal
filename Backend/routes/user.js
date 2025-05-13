@@ -3,6 +3,7 @@ const {
   registerUser,
   authUser,
   getAllDoctors,
+  deleteDoctor,
   sendVerifyOtp,
   verifyEmail,
   sendResetOtp,
@@ -15,6 +16,7 @@ const router = express.Router();
 router.route("/register").post(registerUser)
 router.post("/login", authUser);
 router.route("/doctors").get(getAllDoctors);
+router.delete("/doctor/:doctorId", deleteDoctor);
 router.post("/send-verify-otp",sendVerifyOtp);
 router.post("/verify-email", verifyEmail);
 router.post("/send-reset-otp",sendResetOtp);

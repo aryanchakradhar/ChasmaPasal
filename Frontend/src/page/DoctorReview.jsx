@@ -36,7 +36,7 @@ const DoctorReview = () => {
           </p>
         </div>
         
-        {userInfo?.role !== "doctor" && (
+        {userInfo?.role !== "doctor" && userInfo?.role !== "admin" &&(
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <Button className="whitespace-nowrap">
