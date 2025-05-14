@@ -145,9 +145,8 @@ const OrderSuccess = () => {
       )}
 
       <p className="text-xl mb-8 max-w-lg">
-        Thank you for your purchase. You'll receive a confirmation email
-        shortly.
-        {order?.paymentMethod === "cod" &&
+        Thank you for your purchase. 
+          {order?.paymentMethod === "cod" &&
           " Your items will be delivered soon."}
       </p>
 
