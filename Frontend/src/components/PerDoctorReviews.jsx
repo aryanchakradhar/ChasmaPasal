@@ -10,7 +10,7 @@ import { Textarea } from "./ui/textarea";
 
 const PerDoctorReviews = () => {
   const { doctorId } = useParams();
-  const baseUrl =import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const [reviews, setReviews] = useState([]);
   const [averageRating, setAverageRating] = useState(0);
