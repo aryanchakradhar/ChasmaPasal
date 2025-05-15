@@ -16,7 +16,7 @@ const Cart = () => {
     setCartData,
   } = useContext(CartContext);
 
-  const baseUrl =  import.meta.env.BACKEND_BASE_URL ||  import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const [isLoading, setIsLoading] = useState(false);
 

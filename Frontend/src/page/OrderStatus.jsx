@@ -4,7 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const OrderStatus = () => {
-  const baseUrl =  import.meta.env.BACKEND_BASE_URL ||  import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl =  import.meta.env.VITE_APP_BASE_URL;
   const location = useLocation();
   const navigate = useNavigate();
   const [order, setOrder] = useState(null);

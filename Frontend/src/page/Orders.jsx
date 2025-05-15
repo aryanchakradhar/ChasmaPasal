@@ -22,7 +22,7 @@ import { Card } from "@/components/ui/card";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
-  const baseUrl =  import.meta.env.BACKEND_BASE_URL ||  import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl =  import.meta.env.VITE_APP_BASE_URL;
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const [statusMap, setStatusMap] = useState({});
   const [loading, setLoading] = useState(true);

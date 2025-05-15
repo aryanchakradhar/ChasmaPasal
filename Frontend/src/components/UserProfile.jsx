@@ -14,7 +14,7 @@ import { CalendarDays, Clock, User, MapPin, Phone, Mail } from "lucide-react";
 import { toast } from "react-hot-toast";
 
 export default function UserProfile() {
-  const baseUrl =  import.meta.env.BACKEND_BASE_URL ||  import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl =  import.meta.env.VITE_APP_BASE_URL;
   const [appointments, setAppointments] = useState([]);
   const { userInfo, setUserInfo } = useContext(UserContext);
   const [open, setOpen] = useState(false);

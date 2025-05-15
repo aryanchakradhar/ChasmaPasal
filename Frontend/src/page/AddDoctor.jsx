@@ -29,7 +29,7 @@ import axios from "axios";
 
 const AddDoctor = () => {
   const navigate = useNavigate();
-  const baseUrl =  import.meta.env.BACKEND_BASE_URL ||  import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl =   import.meta.env.VITE_APP_BASE_URL;
 
   const [doctors, setDoctors] = useState([]);
   const [openAddDoctor, setOpenAddDoctor] = useState(false);

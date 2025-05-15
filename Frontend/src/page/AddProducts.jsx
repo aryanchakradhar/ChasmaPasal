@@ -34,7 +34,7 @@ import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 const AddProducts = () => {
   const navigate = useNavigate();
   const { products, setProducts } = useContext(ProductContext);
-  const baseUrl =  import.meta.env.BACKEND_BASE_URL ||  import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl =  import.meta.env.VITE_APP_BASE_URL;
 
   const [openAddProduct, setOpenProduct] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);

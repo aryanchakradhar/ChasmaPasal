@@ -29,7 +29,7 @@ export default function Dashboard() {
   const [userData, setUserData] = useState({});
   const { notifications, setNotifications } = useContext(NotificationContext);
   const { cartCount } = useContext(CartContext);
-  const baseUrl =  import.meta.env.BACKEND_BASE_URL ||  import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl =  import.meta.env.VITE_APP_BASE_URL;
 
   const [showNotifications, setShowNotifications] = useState(false);
   const dropdownRef = useRef(null);

@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const Checkout = () => {
-  const baseUrl =  import.meta.env.BACKEND_BASE_URL ||  import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl =  import.meta.env.VITE_APP_BASE_URL;
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const [cartData, setCartData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);

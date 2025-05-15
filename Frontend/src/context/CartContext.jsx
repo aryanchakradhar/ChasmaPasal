@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 
 export const CartContext = createContext();
 let userInfo = JSON.parse(localStorage.getItem('userInfo'));
-const baseUrl =  import.meta.env.BACKEND_BASE_URL ||  import.meta.env.VITE_APP_BASE_URL;
+const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [cartData, setCartData] = useState([]);

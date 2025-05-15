@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
-  CardDescription,
+ 
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -12,10 +12,10 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { Eye, EyeOff } from "lucide-react";
+
 
 export default function Login() {
-  const baseUrl =  import.meta.env.BACKEND_BASE_URL ||  import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl =  import.meta.env.VITE_APP_BASE_URL;
   const navigate = useNavigate();
 
   // To check if the user is already logged in

@@ -12,7 +12,7 @@ import { ProductContext } from "@/context/ProductContext";
 
 const ProductForm = ({ setOpen, getProducts, id }) => {
   const navigate = useNavigate();
-  const baseUrl =  import.meta.env.BACKEND_BASE_URL ||  import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
   const { products, setProducts } = useContext(ProductContext);
 
   const [product, setProduct] = useState({

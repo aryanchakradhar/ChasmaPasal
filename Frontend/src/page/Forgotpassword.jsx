@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function ForgotPassword() {
-  const baseUrl =  import.meta.env.BACKEND_BASE_URL ||  import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
   const navigate = useNavigate();
 
   const [resetEmail, setResetEmail] = useState("");

@@ -10,7 +10,7 @@ const OrderSuccess = () => {
   const [verified, setVerified] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [order, setOrder] = useState(null);
-  const baseUrl =  import.meta.env.BACKEND_BASE_URL ||  import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
 
@@ -146,7 +146,7 @@ const OrderSuccess = () => {
 
       <p className="text-xl mb-8 max-w-lg">
         Thank you for your purchase. 
-          {order?.paymentMethod === "cod" &&
+        {order?.paymentMethod === "cod" &&
           " Your items will be delivered soon."}
       </p>
 

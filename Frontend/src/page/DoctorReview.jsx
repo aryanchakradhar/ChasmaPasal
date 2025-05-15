@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import DoctorReviewForm from "@/components/DoctorReviewForm";
 
 const DoctorReview = () => {
-  const baseUrl =  import.meta.env.BACKEND_BASE_URL ||  import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl =  import.meta.env.VITE_APP_BASE_URL;
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const [doctors, setDoctors] = useState([]);
   const [open, setOpen] = useState(false);

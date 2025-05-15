@@ -11,7 +11,7 @@ const Products = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const baseUrl =  import.meta.env.BACKEND_BASE_URL ||  import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 
   useEffect(() => {
     const getProducts = async () => {

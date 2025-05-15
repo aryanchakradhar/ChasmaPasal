@@ -34,7 +34,7 @@ const DoctorReviewForm = ({ setOpen, id }) => {
   const [selectedDoctor, setSelectedDoctor] = useState(id || "");
   const [hoverRating, setHoverRating] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl =  import.meta.env.VITE_APP_BASE_URL;
 
   useEffect(() => {
     const fetchDoctors = async () => {
