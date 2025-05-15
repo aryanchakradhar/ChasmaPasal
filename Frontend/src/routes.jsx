@@ -2,8 +2,8 @@ import {
     createBrowserRouter,
   } from "react-router-dom";
 import ErrorPage from "./Errorpage";
-import Login from "./page/Login";
-import Signup  from "./page/Signup";
+import Login from "./page/login";
+import Signup  from "./page/signup";
 import Dashboard from "./page/Dashboard";
 import Home from "./components/Home";
 import AppointmentForm from "./components/AppointmentForm";
