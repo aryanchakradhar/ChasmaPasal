@@ -14,7 +14,7 @@ import { CalendarDays, Clock, User, MapPin, Phone, Mail } from "lucide-react";
 import { toast } from "react-hot-toast";
 
 export default function UserProfile() {
-  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl =  import.meta.env.BACKEND_BASE_URL ||  import.meta.env.VITE_APP_BASE_URL;
   const [appointments, setAppointments] = useState([]);
   const { userInfo, setUserInfo } = useContext(UserContext);
   const [open, setOpen] = useState(false);
@@ -190,7 +190,7 @@ export default function UserProfile() {
                 <div className="mt-4">
                   <Dialog open={open} onOpenChange={setOpen}>
                     <DialogTrigger asChild>
-                      <Button variant="outline">Edit Profile</Button>
+                      <Button className="bg-black text-white hover:bg-gray-400 hover:text-black" variant="outline">Edit Profile</Button>
                     </DialogTrigger>
                     <DialogContent className="max-w-md">
                       <UserProfileSetting setOpen={setOpen} />
@@ -316,7 +316,7 @@ export default function UserProfile() {
                           </div>
 
                       <div className="flex justify-center items-center h-full">
-                        {userInfo?.role === "admin" && (
+                        {userInfo?.role === "admin" || userInfo?.role === "doctor" && (
                           <Button
                             variant="destructive"
                             size="sm"

@@ -11,7 +11,7 @@ const Products = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl =  import.meta.env.BACKEND_BASE_URL ||  import.meta.env.VITE_APP_BASE_URL;
 
   useEffect(() => {
     const getProducts = async () => {
@@ -73,7 +73,7 @@ const Products = () => {
             JSON.parse(localStorage.getItem("userInfo")).role === "admin" && (
               <Link 
                 to="/addProducts"
-                className="flex items-center gap-2 bg-white hover:bg-black text-black hover:text-white px-4 py-2 rounded-lg shadow hover:shadow-md text-sm transition-all"
+                className="flex items-center gap-2 bg-black hover:bg-gray-400 text-white hover:text-black px-4 py-2 rounded-lg shadow hover:shadow-md text-sm transition-all"
               >
                 <FontAwesomeIcon icon={faCartPlus} className="h-4 w-4" />
                 Add Product
@@ -135,7 +135,7 @@ const ProductCard = ({ id, imageSrc, title, price, sku, brand }) => {
       <div className="p-4 pt-0">
         <Link
           to={`/try-it-on/${sku}`}
-          className="inline-flex items-center justify-center w-full text-center bg-gray-800 hover:bg-gray-600 text-white py-2 text-sm rounded-lg transition-all duration-300"
+          className="inline-flex items-center justify-center w-full text-center bg-gray-800 hover:bg-gray-400 text-white hover:text-black  py-2 text-sm rounded-lg transition-all duration-300"
         >
           <FontAwesomeIcon icon={faEye} className="h-4 w-4 mr-2" />
           Try It On

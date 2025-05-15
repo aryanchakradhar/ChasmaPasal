@@ -29,7 +29,7 @@ import axios from "axios";
 
 const AddDoctor = () => {
   const navigate = useNavigate();
-  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl =  import.meta.env.BACKEND_BASE_URL ||  import.meta.env.VITE_APP_BASE_URL;
 
   const [doctors, setDoctors] = useState([]);
   const [openAddDoctor, setOpenAddDoctor] = useState(false);
@@ -71,7 +71,7 @@ const AddDoctor = () => {
           <DialogTrigger asChild>
             <Button
               variant="outline"
-              className="bg-black text-white px-4 py-2 rounded-md shadow hover:bg-gray-800 text-sm"
+              className="bg-black text-white px-4 py-2 rounded-md shadow hover:bg-gray-400 hover:text-black text-sm"
             >
               Add Doctor
             </Button>

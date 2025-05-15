@@ -29,7 +29,7 @@ const AppointmentForm = ({ headerText }) => {
   const [availableSlots, setAvailableSlots] = useState([]);
   const [allSlots, setAllSlots] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl =  import.meta.env.BACKEND_BASE_URL ||  import.meta.env.VITE_APP_BASE_URL;
 
   useEffect(() => {
     const fetchDoctors = async () => {

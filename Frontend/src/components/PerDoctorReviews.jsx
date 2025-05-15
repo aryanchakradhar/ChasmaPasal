@@ -5,12 +5,12 @@ import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { Button } from "./ui/button";
 import DoctorReviewForm from "./DoctorReviewForm";
 import { toast } from "react-toastify";
-import { Star, StarHalf, Trash2, Edit, Save, X } from "lucide-react";
+import { Star,  Trash2, Edit, Save, X } from "lucide-react";
 import { Textarea } from "./ui/textarea";
 
 const PerDoctorReviews = () => {
   const { doctorId } = useParams();
-  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl =  import.meta.env.BACKEND_BASE_URL ||  import.meta.env.VITE_APP_BASE_URL;
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const [reviews, setReviews] = useState([]);
   const [averageRating, setAverageRating] = useState(0);
@@ -174,7 +174,7 @@ const PerDoctorReviews = () => {
           {userInfo.role !== "doctor" && userInfo.role !== "admin" &&(
             <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger asChild>
-                <Button className="whitespace-nowrap">
+                <Button className="whitespace-nowrap bg-black text-white  hover:bg-gray-400 hover:text-black">
                   Share Your Experience
                 </Button>
               </DialogTrigger>
@@ -308,10 +308,10 @@ const PerDoctorReviews = () => {
               <p className="text-gray-500 dark:text-gray-400">
                 Be the first to share your experience with this doctor.
               </p>
-              {userInfo.role !== "doctor" && (
+              {userInfo.role === "user" && (
                 <Dialog open={open} onOpenChange={setOpen}>
                   <DialogTrigger asChild>
-                    <Button>
+                    <Button className="bg-black text-white px-4 py-2 rounded-md shadow hover:bg-gray-400 hover:text-black">
                       Write the First Review
                     </Button>
                   </DialogTrigger>

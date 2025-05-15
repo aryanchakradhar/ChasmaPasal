@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 import { Eye, EyeOff } from "lucide-react";
 
 export default function Login() {
-  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl =  import.meta.env.BACKEND_BASE_URL ||  import.meta.env.VITE_APP_BASE_URL;
   const navigate = useNavigate();
 
   // To check if the user is already logged in

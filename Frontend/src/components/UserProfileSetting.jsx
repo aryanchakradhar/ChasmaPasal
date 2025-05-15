@@ -16,7 +16,7 @@ const UserProfileSetting = ({ setOpen }) => {
   const [file, setFile] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
-  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl =  import.meta.env.BACKEND_BASE_URL ||  import.meta.env.VITE_APP_BASE_URL;
   const { userInfo, setUserInfo } = useContext(UserContext);
 
   const handleFileChange = (e) => {

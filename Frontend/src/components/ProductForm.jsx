@@ -12,7 +12,7 @@ import { ProductContext } from "@/context/ProductContext";
 
 const ProductForm = ({ setOpen, getProducts, id }) => {
   const navigate = useNavigate();
-  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl =  import.meta.env.BACKEND_BASE_URL ||  import.meta.env.VITE_APP_BASE_URL;
   const { products, setProducts } = useContext(ProductContext);
 
   const [product, setProduct] = useState({
@@ -193,7 +193,7 @@ const ProductForm = ({ setOpen, getProducts, id }) => {
             </div>
             <Button
                 type="submit"
-                className="w-full bg-white text-black border border-gray-300 rounded-md hover:bg-black hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                className="w-full bg-black text-white border border-gray-300 rounded-md hover:bg-gray-400 hover:text-black focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 {id ? "Update Product" : "Create Product"}
               </Button>
 

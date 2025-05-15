@@ -14,7 +14,7 @@ import { faCalendar, faClock, faUserMd, faGlasses } from "@fortawesome/free-soli
 
 const Home = () => {
   const [products, setProducts] = useState([]);
-  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl =  import.meta.env.BACKEND_BASE_URL ||  import.meta.env.VITE_APP_BASE_URL;
   const UserInfo = JSON.parse(localStorage.getItem("userInfo"));
   const navigate = useNavigate();
 

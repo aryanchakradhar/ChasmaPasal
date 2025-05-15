@@ -10,7 +10,7 @@ const OrderSuccess = () => {
   const [verified, setVerified] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [order, setOrder] = useState(null);
-  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl =  import.meta.env.BACKEND_BASE_URL ||  import.meta.env.VITE_APP_BASE_URL;
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
 

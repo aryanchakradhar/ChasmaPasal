@@ -28,10 +28,13 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { ProductContext } from "@/context/ProductContext";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+
 const AddProducts = () => {
   const navigate = useNavigate();
   const { products, setProducts } = useContext(ProductContext);
-  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl =  import.meta.env.BACKEND_BASE_URL ||  import.meta.env.VITE_APP_BASE_URL;
 
   const [openAddProduct, setOpenProduct] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -74,7 +77,7 @@ const AddProducts = () => {
           <DialogTrigger asChild>
             <Button
               variant="outline"
-              className="bg-white text-black px-4 py-2 rounded-md shadow hover:bg-black hover:text-white text-sm"
+              className="bg-black text-white px-4 py-2 rounded-md shadow hover:bg-gray-400 hover:text-black text-sm"
             >
               Add Product
             </Button>
@@ -118,7 +121,7 @@ const AddProducts = () => {
               <TableCell className="hidden md:table-cell">Rs {product.price}</TableCell>
               <TableCell className="hidden md:table-cell">{product.createdAt}</TableCell>
               <TableCell className="text-center">
-                <div className="flex justify-center gap-4">
+                <div className="flex justify-center gap-2">
                   <Dialog
                     open={editDialogOpen && selectedProductId === product._id}
                     onOpenChange={(open) => {
@@ -127,11 +130,11 @@ const AddProducts = () => {
                     }}
                   >
                     <DialogTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-6 py-2"
+                      <Button className="mt-2"
+                        size="sm"
                         onClick={() => setSelectedProductId(product._id)}
                       >
+                        <FontAwesomeIcon icon={faPen} className="mr-2" />
                         Edit
                       </Button>
                     </DialogTrigger>
@@ -143,13 +146,14 @@ const AddProducts = () => {
                       />
                     </DialogContent>
                   </Dialog>
-
+                    
                   <AlertDialog>
                     <AlertDialogTrigger>
                       <Button
-                        variant="outline"
-                        className="bg-red-500 text-white hover:bg-red-600 px-6 py-2"
+                        variant="destructive"
+                        size="sm"
                       >
+                        <FontAwesomeIcon icon={faTrash} className="mr-2" />
                         Delete
                       </Button>
                     </AlertDialogTrigger>

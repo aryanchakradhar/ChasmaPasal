@@ -6,7 +6,7 @@ import { Card } from '@/components/ui/card';
 import { formatDistanceToNow } from 'date-fns';
 
 const NotificationPage = () => {
-  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl =  import.meta.env.BACKEND_BASE_URL ||  import.meta.env.VITE_APP_BASE_URL;
   const userInfo = JSON.parse(localStorage.getItem('userInfo'));
   const { notifications, setNotifications } = useContext(NotificationContext);
   const [isLoading, setIsLoading] = useState(true);

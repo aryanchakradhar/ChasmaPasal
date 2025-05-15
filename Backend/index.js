@@ -26,8 +26,11 @@ app.use(
   "/uploads/images/",
   express.static(path.join(__dirname, "/uploads/images/"))
 );
+
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
+
 const corsOptions = {
-  origin: "*",
+  origin: FRONTEND_URL,
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   preflightContinue: false,
   optionsSuccessStatus: 204,

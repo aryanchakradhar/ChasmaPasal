@@ -20,7 +20,7 @@ const ProductDetail = () => {
   const [data, setData] = useState({});
   const [isCartOpen, setIsCartOpen] = useState(false);
   const { id } = useParams();
-  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl =  import.meta.env.BACKEND_BASE_URL ||  import.meta.env.VITE_APP_BASE_URL;
   const { addToCart } = useContext(CartContext);
 
   useEffect(() => {

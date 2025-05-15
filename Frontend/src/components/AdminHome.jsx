@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -22,8 +22,8 @@ const AdminHome = () => {
   });
 
   const [products, setProducts] = useState([]);
-  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
-  const navigate = useNavigate();
+  const baseUrl =  import.meta.env.BACKEND_BASE_URL ||  import.meta.env.VITE_APP_BASE_URL;
+ 
 
   useEffect(() => {
     const getCountsAndProducts = async () => {
