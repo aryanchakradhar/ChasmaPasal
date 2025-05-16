@@ -174,7 +174,7 @@ const PerDoctorReviews = () => {
           {userInfo.role !== "doctor" && userInfo.role !== "admin" &&(
             <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger asChild>
-                <Button className="whitespace-nowrap bg-black text-white  hover:bg-gray-400 hover:text-black">
+                <Button className="whitespace-nowrap bg-black text-white  hover:bg-gray-400 hover:text-black hover:border-black">
                   Share Your Experience
                 </Button>
               </DialogTrigger>
@@ -311,7 +311,7 @@ const PerDoctorReviews = () => {
               {userInfo.role === "user" && (
                 <Dialog open={open} onOpenChange={setOpen}>
                   <DialogTrigger asChild>
-                    <Button className="bg-black text-white px-4 py-2 rounded-md shadow hover:bg-gray-400 hover:text-black">
+                    <Button className="bg-black text-white px-4 py-2 rounded-md shadow hover:bg-gray-400 hover:text-black hover:border-black">
                       Write the First Review
                     </Button>
                   </DialogTrigger>

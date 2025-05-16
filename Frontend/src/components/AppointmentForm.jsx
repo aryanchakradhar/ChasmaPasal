@@ -261,7 +261,7 @@ const AppointmentForm = ({ headerText }) => {
               {/* Submit */}
               <Button
                 type="submit"
-                className="w-full h-12 bg-black hover:bg-white text-white hover:text-black border border-black hover:border-gray-300 transition-all rounded-lg shadow-md mt-4 disabled:opacity-60"
+                className="w-full h-12 bg-black hover:bg-gray-400 text-white hover:text-black border border-black hover:border-black transition-all rounded-lg shadow-md mt-4 disabled:opacity-60"
                 disabled={isLoading}
               >
                 {isLoading ? (

@@ -39,7 +39,7 @@ const DoctorReview = () => {
         {userInfo?.role !== "doctor" && userInfo?.role !== "admin" &&(
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <Button className="whitespace-nowrap bg-black text-white  hover:bg-gray-400 hover:text-black ">
+              <Button className="whitespace-nowrap bg-black text-white  hover:bg-gray-400 hover:text-black hover:border-black ">
                 Share Your Experience
               </Button>
             </DialogTrigger>

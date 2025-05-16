@@ -80,7 +80,7 @@ const Home = () => {
                 <p className="text-xl md:text-2xl text-center">With our trusted eye specialists</p>
                 <Link
                   to="/AppointmentForm"
-                  className="mt-8 px-8 py-4 bg-white text-black font-bold rounded-lg hover:text-gray-700 hover:bg-gray-200 transition-colors"
+                  className="mt-8 px-8 py-4 bg-white text-black font-bold hover:border-black rounded-lg hover:text-gray-700 hover:bg-gray-200 transition-colors"
                 >
                   BOOK NOW
                 </Link>
@@ -112,7 +112,7 @@ const Home = () => {
 
       {/* Featured Products Section */}
       <div className="w-full px-6 md:px-12">
-        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">Featured Products</h2>
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center ">Featured Products</h2>
         <Swiper
           spaceBetween={20}
           slidesPerView={3}

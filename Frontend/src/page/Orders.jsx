@@ -22,16 +22,25 @@ import { Card } from "@/components/ui/card";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
-  const baseUrl =  import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const [statusMap, setStatusMap] = useState({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const initializeStatusMap = (orders) => {
+      const initialStatusMap = {};
+      orders.forEach((order) => {
+        initialStatusMap[order._id] = order.status;
+      });
+      setStatusMap(initialStatusMap);
+    };
+
     const fetchAllOrders = async () => {
       try {
         const response = await axios.get(`${baseUrl}/orders`);
         setOrders(response.data);
+        initializeStatusMap(response.data);
         setLoading(false);
       } catch (error) {
         console.error(error);
@@ -44,6 +53,7 @@ const Orders = () => {
       try {
         const response = await axios.get(`${baseUrl}/orders/${userInfo._id}`);
         setOrders(response.data);
+        initializeStatusMap(response.data);
         setLoading(false);
       } catch (error) {
         console.error(error);
@@ -67,31 +77,35 @@ const Orders = () => {
       year: "numeric",
     });
   };
+const handleUpdate = async (id) => {
+  const selectedStatus = statusMap[id];
+  if (!selectedStatus) {
+    return toast.error("Please select a status");
+  }
 
-  const handleUpdate = async (id) => {
-    const selectedStatus = statusMap[id];
-    if (!selectedStatus) {
-      return toast.error("Please select a status");
+  try {
+    const response = await axios.put(`${baseUrl}/orders/${id}`, {
+      status: selectedStatus,
+    });
+    console.log("Update response:", response);
+    if (response.status === 200) {
+      toast.success("Order updated successfully");
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order._id === id ? { ...order, status: selectedStatus } : order
+        )
+      );
+    } else {
+      toast.error("Failed to update order");
     }
+  } catch (error) {
+    console.error("Update order error:", error.response || error);
+    toast.error(
+      error.response?.data?.message || "Error updating order"
+    );
+  }
+};
 
-    try {
-      const response = await axios.put(`${baseUrl}/orders/${id}`, {
-        status: selectedStatus,
-      });
-      if (response.status === 200) {
-        toast.success("Order updated successfully");
-        setOrders((prevOrders) =>
-          prevOrders.map((order) =>
-            order._id === id ? { ...order, status: selectedStatus } : order
-          )
-        );
-      } else {
-        toast.error("Failed to update order");
-      }
-    } catch (error) {
-      toast.error("Error updating order");
-    }
-  };
 
   const handleDelete = async (id) => {
     try {
@@ -103,6 +117,7 @@ const Orders = () => {
         toast.error("Failed to delete order");
       }
     } catch (error) {
+      console.error(error);
       toast.error("Error deleting order");
     }
   };
@@ -210,7 +225,7 @@ const Orders = () => {
                     <TableCell>
                       {userInfo?.role === "admin" ? (
                         <Select
-                          defaultValue={order.status}
+                          value={statusMap[order._id]} // controlled value here
                           onValueChange={(value) =>
                             setStatusMap({ ...statusMap, [order._id]: value })
                           }
@@ -220,7 +235,7 @@ const Orders = () => {
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="pending">Pending</SelectItem>
-                            <SelectItem value="completed">Completed</SelectItem>
+                            <SelectItem value="delivered">Completed</SelectItem>
                             <SelectItem value="cancelled">Cancelled</SelectItem>
                           </SelectContent>
                         </Select>

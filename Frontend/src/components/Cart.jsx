@@ -64,7 +64,7 @@ const Cart = () => {
                 <div className="flex items-center gap-6 flex-1 min-w-0">
                   <Link to={`/product/${item.product._id}`} className="shrink-0">
                     <img
-                      src={`http://localhost:8080${item.product.image}`}
+                      src={item.product.image}
                       alt={item.product.name}
                       className="w-24 h-24 object-cover rounded-lg border border-gray-200"
                     />

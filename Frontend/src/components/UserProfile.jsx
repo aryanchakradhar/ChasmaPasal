@@ -96,7 +96,7 @@ export default function UserProfile() {
   };
 
   const deleteAppointment = async (appointmentId) => {
-    if (userInfo?.role !== "admin") return;
+    
     try {
       await axios.delete(`${baseUrl}/appointment/${appointmentId}`);
       setAppointments((prev) =>
@@ -109,7 +109,7 @@ export default function UserProfile() {
     }
   };
 
-  const hasPastAppointments = () => {
+    const hasPastAppointments = () => {
     const now = new Date();
     return appointments.some((appointment) => {
       const appointmentDate = new Date(appointment.date);
@@ -138,13 +138,13 @@ export default function UserProfile() {
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <div className="absolute inset-0 bg-black bg-opacity-30 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <div className="absolute inset-0 bg-black bg-opacity-30 hover:border-black rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                   <Dialog open={open} onOpenChange={setOpen}>
                     <DialogTrigger asChild>
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="text-white bg-black bg-opacity-50 hover:bg-opacity-70"
+                        className="text-white bg-black bg-opacity-50 hover:bg-opacity-70 "
                       >
                         Edit Photo
                       </Button>

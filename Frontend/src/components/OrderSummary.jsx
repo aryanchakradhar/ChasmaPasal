@@ -17,7 +17,7 @@ const OrderSummary = ({ cartData }) => {
                     <div className="w-14 h-14 bg-gray-100 dark:bg-gray-700 rounded-md overflow-hidden flex-shrink-0">
                       {item.product.image && (
                         <img 
-                          src={`http://localhost:8080${item.product.image}`}
+                          src={item.product.image}
                           alt={item.product.name}
                           className="w-full h-full object-cover"
                           onError={(e) => {

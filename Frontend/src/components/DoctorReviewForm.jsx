@@ -131,7 +131,7 @@ const DoctorReviewForm = ({ setOpen, id }) => {
   return (
     <Card className="w-full max-w-lg mx-auto border-0 shadow-lg overflow-hidden">
       <CardHeader className="border-b">
-        <CardTitle className="text-2xl font-semibold text-gray-800 dark:text-white">
+        <CardTitle className="text-2xl font-semibold text-gray-800 dark:text-white ">
           Share Your Experience
         </CardTitle>
       </CardHeader>
@@ -139,7 +139,7 @@ const DoctorReviewForm = ({ setOpen, id }) => {
         <form onSubmit={handleSubmit} className="space-y-6">
           {!id && (
             <div className="space-y-2">
-              <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <Label className="text-sm font-medium text-gray-700 dark:text-gray-300 ">
                 Select Doctor
               </Label>
               <Select 

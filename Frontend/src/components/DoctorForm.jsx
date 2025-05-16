@@ -204,7 +204,7 @@ export default function AddDoctorForm() {
                 </button>
               </div>
 
-              <Button type="submit" className="w-full bg-black text-white hover:bg-gray-800">
+              <Button type="submit" className="w-full bg-black text-white hover:bg-gray-400 hover:border-black">
                 Register Doctor
               </Button>
             </form>
