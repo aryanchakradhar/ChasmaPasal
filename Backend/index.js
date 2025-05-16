@@ -28,6 +28,7 @@ app.use(
 );
 
 const FRONTEND_URL = process.env.FRONTEND_URL;
+console.log ("FRONTEND_URL", FRONTEND_URL);
 
 const corsOptions = {
   origin: FRONTEND_URL,

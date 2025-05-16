@@ -77,7 +77,7 @@ const AddProducts = () => {
           <DialogTrigger asChild>
             <Button
               variant="outline"
-              className="bg-black text-white px-4 py-2 rounded-md shadow hover:bg-gray-400 hover:text-black text-sm"
+              className="bg-black text-white border border-black px-4 py-2 rounded-md shadow hover:bg-gray-400 hover:text-black text-sm"
             >
               Add Product
             </Button>
@@ -109,7 +109,7 @@ const AddProducts = () => {
                     alt="Product"
                     className="aspect-square rounded-md object-cover"
                     height="64"
-                    src={`http://localhost:8080${product.image}`}
+                    src={product.image}
                     width="64"
                   />
                 ) : (

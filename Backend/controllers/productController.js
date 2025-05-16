@@ -1,6 +1,5 @@
 const Product = require("../models/product");
-const path = require("path");
-const fs = require("fs");
+const { uploadToCloudinary } = require("../config/fileConfig");
 
 // Get all products
 const getProducts = async (req, res) => {
@@ -27,11 +26,12 @@ const getProductById = async (req, res) => {
 const createProduct = async (req, res) => {
   try {
     const { name, brand, description, price, sku, stock } = req.body;
-    let imagePath = "";
+      let imageUrl = null;
 
     // If a file is uploaded, store the file path
     if (req.file) {
-      imagePath = `/uploads/images/${req.file.filename}`; // Store file path
+      const result = await uploadToCloudinary(req.file.buffer);
+      imageUrl = result.secure_url;
     }
 
     const product = new Product({
@@ -41,7 +41,7 @@ const createProduct = async (req, res) => {
       price,
       sku,
       stock,
-      image: imagePath, // Store image path in MongoDB
+      image: imageUrl,
     });
 
     const savedProduct = await product.save();
@@ -57,17 +57,12 @@ const updateProduct = async (req, res) => {
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ message: "Product not found" });
 
-    let imagePath = product.image; // Keep existing image path if no new image uploaded
+     let imageUrl = existingProduct.image;
 
-    // If a new file is uploaded, delete the old image and save the new file path
+    // If new image uploaded, upload it to Cloudinary
     if (req.file) {
-      if (product.image) {
-        const oldImagePath = path.join(__dirname, "..", product.image);
-        if (fs.existsSync(oldImagePath)) {
-          fs.unlinkSync(oldImagePath); // Delete the old image file
-        }
-      }
-      imagePath = `/uploads/images/${req.file.filename}`; // Store new file path
+      const result = await uploadToCloudinary(req.file.buffer);
+      imageUrl = result.secure_url;
     }
 
     // Update product details
@@ -77,7 +72,7 @@ const updateProduct = async (req, res) => {
     product.price = req.body.price || product.price;
     product.sku = req.body.sku || product.sku;
     product.stock = req.body.stock || product.stock;
-    product.image = imagePath; // Update image path in MongoDB
+    product.image = imageUrl; // Update image url in MongoDB
 
     const updatedProduct = await product.save();
     res.status(200).json(updatedProduct);

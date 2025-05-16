@@ -73,7 +73,7 @@ const Products = () => {
             JSON.parse(localStorage.getItem("userInfo")).role === "admin" && (
               <Link 
                 to="/addProducts"
-                className="flex items-center gap-2 bg-black hover:bg-gray-400 text-white hover:text-black px-4 py-2 rounded-lg shadow hover:shadow-md text-sm transition-all"
+                className="flex items-center gap-2 bg-black hover:bg-gray-400 text-white hover:text-black px-4 py-2 rounded-lg shadow hover:shadow-md text-sm transition-all border border-black"
               >
                 <FontAwesomeIcon icon={faCartPlus} className="h-4 w-4" />
                 Add Product
@@ -116,7 +116,7 @@ const ProductCard = ({ id, imageSrc, title, price, sku, brand }) => {
         <div className="relative h-60 w-full overflow-hidden">
           <img
             alt={title}
-            src={`http://localhost:8080${imageSrc}`}
+            src={imageSrc}
             className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">

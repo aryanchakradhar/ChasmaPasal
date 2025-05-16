@@ -54,7 +54,7 @@ const ProductDetail = () => {
         <img
           alt={data.name}
           className="lg:w-1/2 w-full max-h-[500px] object-contain object-center rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:brightness-105"
-          src={`http://localhost:8080${data.image}`}
+          src={data.image}
         />                
           <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
             <h2 className="text-sm title-font text-gray-500 tracking-widest">

@@ -2,6 +2,7 @@ const User = require("../models/user");
 const { generateToken } = require("../config/generateToken");
 const transporter = require("../config/nodeMailer");
 const bcrypt = require("bcrypt");
+const cloudinary = require('cloudinary').v2;
 
 // Utility function to handle errors
 const handleErrorResponse = (res, statusCode, message) => {
@@ -204,10 +205,18 @@ const updateUsers = async (req, res) => {
     }
 
     // Handle image upload if file is provided
-    if (req.file && req.file.filename) {
-      const filename = req.file.filename;
-      const url = `${req.protocol}://${req.get('host')}/uploads/images/${filename}`;
-      user.image_url = url;
+      if (req.file && req.file.buffer) {
+      const result = await new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "chasmaPasal_uploads" },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+        stream.end(req.file.buffer);
+      });
+      user.image_url = result.secure_url;
     }
 
     const updatedUser = await user.save();

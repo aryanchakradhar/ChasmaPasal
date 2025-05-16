@@ -193,7 +193,7 @@ const ProductForm = ({ setOpen, getProducts, id }) => {
             </div>
             <Button
                 type="submit"
-                className="w-full bg-black text-white border border-gray-300 rounded-md hover:bg-gray-400 hover:text-black focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                className="w-full bg-black text-white border-2 border-black rounded-md hover:bg-gray-400 hover:text-black focus:outline-none focus:ring-2 focus:ring-indigo-500 ">
                 {id ? "Update Product" : "Create Product"}
               </Button>
 

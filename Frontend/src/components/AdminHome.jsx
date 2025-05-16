@@ -5,6 +5,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper/modules";
+
+import { faEye } from "@fortawesome/free-solid-svg-icons";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
@@ -102,13 +104,15 @@ const AdminHome = () => {
         >
           {products.map((product) => (
             <SwiperSlide key={product._id}>
-              <ProductCard
-                id={product._id}
-                imageSrc={product.image}
-                title={product.name}
-                price={product.price}
-                sku={product.sku}
-              />
+             <ProductCard
+              id={product._id}
+              imageSrc={product.image}
+              title={product.name}
+              price={product.price}
+              sku={product.sku}
+              brand={product.brand}
+            />
+
             </SwiperSlide>
           ))}
         </Swiper>
@@ -125,32 +129,47 @@ const InfoCard = ({ icon, title, count, color }) => (
   </div>
 );
 
-const ProductCard = ({ id, imageSrc, title, price, sku }) => (
-  <Card className="overflow-hidden rounded-xl shadow-md dark:bg-gray-900 hover:scale-105 transition-transform duration-300">
-    <Link to={`/product/${id}`}>
-      <div className="h-48 md:h-56 w-full overflow-hidden">
-        <img
-          alt={title}
-          src={`http://localhost:8080${imageSrc}`}
-          className="object-cover w-full h-full hover:scale-110 transition-transform"
-        />
-      </div>
-      <div className="p-4">
-        <div className="flex justify-between items-center">
-          <h2 className="text-gray-800 dark:text-white font-semibold text-sm truncate">{title}</h2>
-          <p className="text-gray-600 font-semibold text-sm">Rs {price}</p>
+
+const ProductCard = ({ id, imageSrc, title, price, sku, brand }) => {
+  return (
+    <Card className="overflow-hidden rounded-xl shadow-md dark:bg-gray-800 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 group">
+      <Link to={`/product/${id}`}>
+        <div className="relative h-60 w-full overflow-hidden">
+          <img
+            alt={title}
+            src={imageSrc}
+            className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+            <span className="text-white text-sm font-medium">{brand}</span>
+          </div>
         </div>
-      </div>
-    </Link>
-    <div className="p-4 pt-0">
-      <Link
-        to={`/try-it-on/${sku}`}
-        className="block w-full text-center bg-black text-white hover:bg-gray-800 py-2 rounded-md text-sm"
-      >
-        Try It On
+        <div className="p-4">
+          <div className="flex flex-col justify-between items-start">
+            <h2
+              className="text-gray-800 dark:text-white font-semibold text-sm truncate"
+              title={title}
+            >
+              {title}
+            </h2>
+            <p className="text-black dark:text-indigo-400 font-medium mt-1">
+              Rs {price}
+            </p>
+          </div>
+        </div>
       </Link>
-    </div>
-  </Card>
-);
+      <div className="p-4 pt-0">
+        <Link
+          to={`/try-it-on/${sku}`}
+          className="inline-flex items-center justify-center w-full text-center bg-gray-800 hover:bg-gray-400 text-white hover:text-black py-2 text-sm rounded-lg transition-all duration-300"
+        >
+          <FontAwesomeIcon icon={faEye} className="h-4 w-4 mr-2" />
+          Try It On
+        </Link>
+      </div>
+    </Card>
+  );
+};
+
 
 export default AdminHome;
