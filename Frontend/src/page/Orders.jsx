@@ -119,6 +119,28 @@ const Orders = () => {
     }
   };
 
+  const handleCancel = async (id) => {
+  try {
+    const response = await axios.patch(`${baseUrl}/orders/${id}/cancel`);
+    if (response.status === 200) {
+      toast.success("Order cancelled successfully");
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order._id === id ? { ...order, status: "cancelled" } : order
+        )
+      );
+    } else {
+      toast.error("Failed to cancel order");
+    }
+  } catch (error) {
+    console.error("Cancel order error:", error.response || error);
+    toast.error(
+      error.response?.data?.message || "Error cancelling order"
+    );
+  }
+};
+
+
   const getStatusBadge = (status) => {
     switch (status) {
       case "completed":
@@ -260,25 +282,38 @@ const Orders = () => {
                         ))}
                       </div>
                     </TableCell>
-                    {userInfo?.role === "admin" && (
-                      <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
-                          <Button
-                            size="sm"
-                            onClick={() => handleUpdate(order._id)}
-                          >
-                            Update
-                          </Button>
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            onClick={() => handleDelete(order._id)}
-                          >
-                            Delete
-                          </Button>
-                        </div>
-                      </TableCell>
-                    )}
+                    <TableCell className="text-right">
+                      <div className="flex justify-end gap-2">
+                        {userInfo?.role === "admin" ? (
+                          <>
+                            <Button
+                              size="sm"
+                              onClick={() => handleUpdate(order._id)}
+                            >
+                              Update
+                            </Button>
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              onClick={() => handleDelete(order._id)}
+                            >
+                              Delete
+                            </Button>
+                          </>
+                        ) : (
+                          order.status === "pending" && (
+                            <Button
+                              size="sm"
+                              variant="destructive"
+                              onClick={() => handleCancel(order._id)}
+                            >
+                              Cancel
+                            </Button>
+                          )
+                        )}
+                      </div>
+                    </TableCell>
+
                   </TableRow>
                 ))}
               </TableBody>
