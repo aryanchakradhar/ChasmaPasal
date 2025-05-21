@@ -77,35 +77,32 @@ const Orders = () => {
       year: "numeric",
     });
   };
-const handleUpdate = async (id) => {
-  const selectedStatus = statusMap[id];
-  if (!selectedStatus) {
-    return toast.error("Please select a status");
-  }
-
-  try {
-    const response = await axios.put(`${baseUrl}/orders/${id}`, {
-      status: selectedStatus,
-    });
-    console.log("Update response:", response);
-    if (response.status === 200) {
-      toast.success("Order updated successfully");
-      setOrders((prevOrders) =>
-        prevOrders.map((order) =>
-          order._id === id ? { ...order, status: selectedStatus } : order
-        )
-      );
-    } else {
-      toast.error("Failed to update order");
+  const handleUpdate = async (id) => {
+    const selectedStatus = statusMap[id];
+    if (!selectedStatus) {
+      return toast.error("Please select a status");
     }
-  } catch (error) {
-    console.error("Update order error:", error.response || error);
-    toast.error(
-      error.response?.data?.message || "Error updating order"
-    );
-  }
-};
 
+    try {
+      const response = await axios.put(`${baseUrl}/orders/${id}`, {
+        status: selectedStatus,
+      });
+      console.log("Update response:", response);
+      if (response.status === 200) {
+        toast.success("Order updated successfully");
+        setOrders((prevOrders) =>
+          prevOrders.map((order) =>
+            order._id === id ? { ...order, status: selectedStatus } : order
+          )
+        );
+      } else {
+        toast.error("Failed to update order");
+      }
+    } catch (error) {
+      console.error("Update order error:", error.response || error);
+      toast.error(error.response?.data?.message || "Error updating order");
+    }
+  };
 
   const handleDelete = async (id) => {
     try {
@@ -121,29 +118,6 @@ const handleUpdate = async (id) => {
       toast.error("Error deleting order");
     }
   };
-
-  const handleCancel = async (id) => {
-  try {
-    const confirm = window.confirm("Are you sure you want to cancel this order?");
-    if (!confirm) return;
-
-    const response = await axios.patch(`${baseUrl}/orders/${id}/cancel`);
-    if (response.status === 200) {
-      toast.success("Order cancelled successfully");
-      setOrders((prevOrders) =>
-        prevOrders.map((order) =>
-          order._id === id ? { ...order, status: "cancelled" } : order
-        )
-      );
-    } else {
-      toast.error("Failed to cancel order");
-    }
-  } catch (error) {
-    console.error(error);
-    toast.error("Error cancelling order");
-  }
-};
-
 
   const getStatusBadge = (status) => {
     switch (status) {
@@ -215,7 +189,9 @@ const handleUpdate = async (id) => {
                   <TableHead className="hidden md:table-cell">Amount</TableHead>
                   <TableHead className="hidden md:table-cell">Date</TableHead>
                   <TableHead>Status</TableHead>
-                  <TableHead className="hidden md:table-cell">Payment</TableHead>
+                  <TableHead className="hidden md:table-cell">
+                    Payment
+                  </TableHead>
                   <TableHead>Items</TableHead>
                   {userInfo?.role === "admin" && (
                     <TableHead className="text-right">Actions</TableHead>
@@ -234,7 +210,9 @@ const handleUpdate = async (id) => {
                       </span>
                     </TableCell>
                     <TableCell>
-                      <div className="font-medium">{order.shippingAddress.name}</div>
+                      <div className="font-medium">
+                        {order.shippingAddress.name}
+                      </div>
                       <div className="text-sm text-gray-500 dark:text-gray-400 md:hidden">
                         {order.shippingAddress.address}
                       </div>
@@ -282,35 +260,25 @@ const handleUpdate = async (id) => {
                         ))}
                       </div>
                     </TableCell>
-                   <TableCell className="text-right">
+                    {userInfo?.role === "admin" && (
+                      <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
-                          {userInfo?.role === "admin" ? (
-                            <>
-                              <Button size="sm" onClick={() => handleUpdate(order._id)}>
-                                Update
-                              </Button>
-                              <Button
-                                variant="destructive"
-                                size="sm"
-                                onClick={() => handleDelete(order._id)}
-                              >
-                                Delete
-                              </Button>
-                            </>
-                          ) : (
-                            order.status === "pending" && (
-                              <Button
-                                variant="destructive"
-                                size="sm"
-                                onClick={() => handleCancel(order._id)}
-                              >
-                                Cancel
-                              </Button>
-                            )
-                          )}
+                          <Button
+                            size="sm"
+                            onClick={() => handleUpdate(order._id)}
+                          >
+                            Update
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => handleDelete(order._id)}
+                          >
+                            Delete
+                          </Button>
                         </div>
                       </TableCell>
-
+                    )}
                   </TableRow>
                 ))}
               </TableBody>

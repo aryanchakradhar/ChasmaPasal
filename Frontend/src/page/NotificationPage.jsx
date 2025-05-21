@@ -131,7 +131,7 @@ const NotificationPage = () => {
         <div className='flex flex-col items-center justify-center py-12 space-y-4 text-center'>
           <BellOff className='h-10 w-10 text-gray-400' />
           <h3 className='text-lg font-medium text-gray-900 dark:text-white'>No notifications</h3>
-          <p className='text-gray-500'>You don't have any notifications yet.</p>
+          <p className='text-gray-500'>You don&apos;t have any notifications yet.</p>
         </div>
       )}
     </div>

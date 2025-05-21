@@ -11,7 +11,7 @@ import axios from "axios";
 import { UserContext } from "@/context/UserContext";
 import { Badge } from "./ui/badge";
 import { CalendarDays, Clock, User, MapPin, Phone, Mail } from "lucide-react";
-import { toast } from "react-hot-toast";
+import { toast } from "react-toastify";
 
 export default function UserProfile() {
   const baseUrl =  import.meta.env.VITE_APP_BASE_URL;

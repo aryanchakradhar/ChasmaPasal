@@ -32,7 +32,7 @@ const ProductForm = ({ setOpen, getProducts, id }) => {
     const getProductData = async () => {
       const data = await getProduct(id);
       setProduct({ ...data, image: data.image });
-      setImagePreview(`http://localhost:8080${data.image}`);
+      setImagePreview(data.image);
     };
     getProductData();
   }, [id]);

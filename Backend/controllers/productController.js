@@ -1,5 +1,7 @@
 const Product = require("../models/product");
 const { uploadToCloudinary } = require("../config/fileConfig");
+const fs = require("fs");
+const path = require("path");
 
 // Get all products
 const getProducts = async (req, res) => {
@@ -52,12 +54,15 @@ const createProduct = async (req, res) => {
 };
 
 // Update product with image upload
+// Update product with image upload
 const updateProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
-    if (!product) return res.status(404).json({ message: "Product not found" });
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
 
-     let imageUrl = existingProduct.image;
+    let imageUrl = product.image; // Use the fetched product here
 
     // If new image uploaded, upload it to Cloudinary
     if (req.file) {
@@ -72,14 +77,16 @@ const updateProduct = async (req, res) => {
     product.price = req.body.price || product.price;
     product.sku = req.body.sku || product.sku;
     product.stock = req.body.stock || product.stock;
-    product.image = imageUrl; // Update image url in MongoDB
+    product.image = imageUrl; // Update image URL in MongoDB
 
     const updatedProduct = await product.save();
     res.status(200).json(updatedProduct);
   } catch (error) {
+    console.error("Error updating product:", error);
     res.status(500).json({ message: error.message });
   }
 };
+
 
 // Delete product
 const deleteProduct = async (req, res) => {

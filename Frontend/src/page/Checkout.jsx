@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const Checkout = () => {
-  const baseUrl =  import.meta.env.VITE_APP_BASE_URL;
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const [cartData, setCartData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -60,7 +60,7 @@ const Checkout = () => {
         nameAtPurchase: item.product.title,
         priceAtPurchase: item.product.price,
       })),
-      totalPrice: cartData.bill,
+      totalPrice: cartData.bill + 5,
       userId: userInfo._id,
       paymentMethod: formData.paymentMethod,
     };
@@ -124,7 +124,7 @@ const Checkout = () => {
           nameAtPurchase: item.product.title,
           priceAtPurchase: item.product.price,
         })),
-        totalPrice: cartData.bill,
+        totalPrice: cartData.bill + 5,
         userId: userInfo._id,
       };
 
@@ -147,8 +147,8 @@ const Checkout = () => {
         toast.error(response.data.message || "Payment initialization failed");
       }
     } catch (error) {
-      console.error("Payment error:", error);
-      toast.error(error.response?.data?.error || "Payment processing failed");
+      console.error("Payment error:", error.response?.data?.message);
+      toast.error(error.response?.data?.message || "Payment processing failed");
     }
   };
 

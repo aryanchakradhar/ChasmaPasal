@@ -14,7 +14,7 @@ const KHALTI_HEADERS = {
 const createOrderForPayment = async (req, res, next) => {
   try {
     const { userId, items, totalPrice, shippingAddress } = req.body;
-    console.log("Creating order for payment:", req.body);
+    console.log("Order for payment:", req.body);
 
     // Check for existing pending order for the same cart
     const existingOrder = await Order.findOne({
@@ -24,25 +24,43 @@ const createOrderForPayment = async (req, res, next) => {
     });
 
     if (existingOrder) {
-      return res.status(400).json({
-        success: false,
-        message: "Pending order already exists for these items",
+      console.log("existingOrder", existingOrder);
+      if (existingOrder.paymentMethod != "card") {
+        return res.status(400).json({
+          success: false,
+          message: "Pending order already exists for these items.",
+        });
+      } else {
+        const updatedOrder = await Order.findByIdAndUpdate(
+          existingOrder.id,
+          {
+            items: items,
+            totalPrice: totalPrice,
+            shippingAddress: shippingAddress,
+          },
+          { new: true }
+        );
+        req.order = updatedOrder;
+        console.log("req.order", req.order);
+        next();
+      }
+    } else {
+      console.log("Creating order for payment:", req.body);
+
+      const newOrder = new Order({
+        userId,
+        items,
+        paymentMethod: "card",
+        totalPrice,
+        shippingAddress,
+        status: "pending",
+        paymentStatus: "pending",
       });
+
+      const savedOrder = await newOrder.save();
+      req.order = savedOrder;
+      next();
     }
-
-    const newOrder = new Order({
-      userId,
-      items,
-      paymentMethod: "card",
-      totalPrice,
-      shippingAddress,
-      status: "pending",
-      paymentStatus: "pending",
-    });
-
-    const savedOrder = await newOrder.save();
-    req.order = savedOrder;
-    next();
   } catch (error) {
     console.error("Order creation error:", error);
     return res.status(500).json({
@@ -65,7 +83,11 @@ const initializeKhaltiPayment = async (req, res) => {
       });
     }
 
-    console.log("Initializing Khalti payment for order:", order.id);
+    console.log(
+      "Initializing Khalti payment for order:",
+      order.id,
+      order.totalPrice
+    );
 
     const payload = {
       return_url: `${process.env.FRONTEND_URL}/orderstatus`,
@@ -80,21 +102,40 @@ const initializeKhaltiPayment = async (req, res) => {
       },
     };
 
+    console.log("Payload", payload);
+
     const response = await axios.post(
       `${process.env.KHALTI_GATEWAY_URL}/epayment/initiate/`,
       payload,
       { headers: KHALTI_HEADERS }
     );
 
+    console.log("initiate response", response);
+
     const { pidx, payment_url } = response.data;
 
-    await Payment.create({
+    // Check for existing pending payment
+    const existingPayment = await Payment.findOne({
       orderId: order._id,
-      amount: order.totalPrice,
-      pidx,
-      paymentGateway: "khalti",
-      status: "pending",
     });
+
+    console.log("existingPayment", order._id, order);
+    if (existingPayment) {
+      console.log("existing payment", existingPayment);
+      await Payment.findByIdAndUpdate(existingPayment._id, {
+        amount: order.totalPrice,
+        pidx,
+        status: "pending",
+      });
+    } else {
+      await Payment.create({
+        orderId: order._id,
+        amount: order.totalPrice,
+        pidx,
+        paymentGateway: "khalti",
+        status: "pending",
+      });
+    }
 
     await Order.findByIdAndUpdate(order._id, {
       khaltiPidx: pidx,
@@ -171,7 +212,7 @@ const verifyKhaltiPayment = async (req, res) => {
       Order.findByIdAndUpdate(
         orderId,
         {
-          status: "completed",
+          status: "delivered",
           paymentStatus: "paid",
           paymentMethod: "card",
         },
