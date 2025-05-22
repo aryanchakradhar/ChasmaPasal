@@ -42,10 +42,10 @@ const ProductDetail = () => {
     toast.success(`${data.name} added to cart`);
   };
 
-  const handleFavouriteClick = () => {
-    setIsFavourite(!isFavourite);
-    toast.success(isFavourite ? "Removed from favorites" : "Added to favorites");
-  };
+  // const handleFavouriteClick = () => {
+  //   setIsFavourite(!isFavourite);
+  //   toast.success(isFavourite ? "Removed from favorites" : "Added to favorites");
+  // };
 
   return (
     <section className="text-gray-600 body-font overflow-hidden">
@@ -69,14 +69,14 @@ const ProductDetail = () => {
               <span className="title-font font-medium text-2xl text-gray-900">
                 Rs {data.price}
               </span>
-              <button
+              {/* <button
                 onClick={handleFavouriteClick}
                 className={`rounded-full w-10 h-10 p-0 border-0 inline-flex items-center justify-center ${isFavourite ? 'text-red-500 bg-red-100' : 'text-gray-500 bg-gray-200'}`}
               >
                 <svg fill="currentColor" className="w-5 h-5" viewBox="0 0 24 24">
                   <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
                 </svg>
-              </button>
+              </button> */}
             </div>
 
             <div className="flex flex-col gap-3 mt-6">

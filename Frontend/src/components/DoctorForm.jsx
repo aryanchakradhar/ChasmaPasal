@@ -175,14 +175,7 @@ export default function AddDoctorForm() {
                   required
                   className="pr-10"
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-9 text-gray-500"
-                >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
-              </div>
+               </div>
 
               <div className="relative">
                 <Label htmlFor="confirmPassword">Confirm Password</Label>
@@ -195,14 +188,7 @@ export default function AddDoctorForm() {
                   required
                   className="pr-10"
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-9 text-gray-500"
-                >
-                  {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
-              </div>
+                </div>
 
               <Button type="submit" className="w-full bg-black text-white hover:bg-gray-400 hover:border-black">
                 Register Doctor

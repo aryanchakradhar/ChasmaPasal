@@ -42,7 +42,14 @@ const getOrders = async (req, res) => {
 
 const updateOrder = async (req, res) => {
   const id = req.params.id;
-  const status = req.body.status;
+  const allowedFields = [
+    "status",
+    "items",
+    "paymentMethod",
+    "totalPrice",
+    "shippingAddress",
+  ];
+
   console.log("Update order payload:", req.body);
   console.log("Updating order ID:", req.params.id);
   try {
@@ -50,7 +57,13 @@ const updateOrder = async (req, res) => {
     if (!order) {
       return res.status(404).send({ message: "Order not found." });
     }
-    order.status = status;
+
+    // Update only the fields present in req.body and allowedFields
+    for (const key of allowedFields) {
+      if (key in req.body) {
+        order[key] = req.body[key];
+      }
+    }
     await order.save();
     return res.status(200).send({ message: "Order updated successfully" });
   } catch (error) {

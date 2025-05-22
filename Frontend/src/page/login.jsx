@@ -105,10 +105,8 @@ export default function Login() {
               </div>
 
               <div className="flex justify-between gap-2 lg:flex text-sm mt-4">
-                <label>
-                  <input type="checkbox" className="accent-black" /> Remember me
-                </label>
-                <Link to="/forgotpassword" className="underline text-black">
+                
+                <Link to="/forgotpassword" className="underline text-black hover:text-gray-400">
                   Forgot Password?
                 </Link>
               </div>
@@ -120,7 +118,7 @@ export default function Login() {
 
             <div className="mt-4 text-center text-sm">
               Don't have an account?{" "}
-              <Link to="/signup" className="underline text-black">
+              <Link to="/signup" className="underline text-black hover:text-gray-400">
                 Sign Up
               </Link>
             </div>

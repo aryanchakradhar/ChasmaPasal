@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import CheckoutForm from "@/components/forms/CheckoutForm";
 import OrderSummary from "@/components/OrderSummary";
 import PaymentSection from "@/components/PaymentSection";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { CartContext } from "../context/CartContext";
 
 const Checkout = () => {
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
@@ -12,6 +13,7 @@ const Checkout = () => {
   const [cartData, setCartData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+  const { removeFromCart } = useContext(CartContext);
 
   useEffect(() => {
     if (!userInfo) {
@@ -23,6 +25,7 @@ const Checkout = () => {
       try {
         setIsLoading(true);
         const response = await axios.get(`${baseUrl}/cart/${userInfo._id}`);
+        console.log("cart response", response.data);
         setCartData(response.data || []);
       } catch (error) {
         toast.error(error.response?.data.error || "Failed to fetch cart data");
@@ -66,20 +69,50 @@ const Checkout = () => {
     };
 
     try {
-      const response = await axios.post(`${baseUrl}/orders`, orderData);
-      if (response.status === 200) {
-        // Clear cart for COD orders
-        setCartData({ items: [], bill: 0 });
+      const existingOrders = await axios.get(
+        `${baseUrl}/orders/${userInfo._id}`
+      );
+      const pendingOrder = existingOrders.data.find(
+        (order) => order.status === "pending"
+      );
+
+      console.log("existingOrders", existingOrders);
+      console.log("pendingOrder", pendingOrder);
+
+      let updateOrCreateResponse;
+
+      if (pendingOrder) {
+        updateOrCreateResponse = await axios.put(
+          `${baseUrl}/orders/${pendingOrder.id}`,
+          orderData
+        );
+
+        console.log("updateOrCreateResponse", updateOrCreateResponse);
+      } else {
+        updateOrCreateResponse = await axios.post(
+          `${baseUrl}/orders`,
+          orderData
+        );
+      }
+
+      if (updateOrCreateResponse.status === 200) {
+        for (const item of cartData.items) {
+          console.log("item", item.product);
+          removeFromCart(item.product);
+        }
 
         if (formData.paymentMethod === "cod") {
-          navigate("/ordersuccess", { state: { orderId: response.data._id } });
+          navigate("/ordersuccess", {
+            state: { orderId: updateOrCreateResponse.data._id },
+          });
           toast.success("Order placed successfully!");
         }
       }
     } catch (error) {
       console.error("Error during checkout:", error);
       toast.error(
-        error.response?.data?.message || "An error occurred during checkout."
+        error.updateOrCreateResponse?.data?.message ||
+          "An error occurred during checkout."
       );
     }
   };

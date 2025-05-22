@@ -212,7 +212,7 @@ export default function Signup() {
                   <span className="flex-shrink mx-4 text-gray-400">or</span>
                   <div className="flex-grow border-t border-gray-400"></div>
                 </div>
-                <Button variant="outline" className="w-full">Sign up with Google</Button>
+                
                 <div className="mt-4 text-center text-sm">
                   Already have an account?{" "}
                   <Link to="/login" className="underline text-black">Sign in</Link>

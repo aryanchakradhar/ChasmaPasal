@@ -181,9 +181,9 @@ export default function Dashboard() {
             <div>
               <h3 className="font-semibold text-gray-800 mb-2">Quick Links</h3>
               <ul className="space-y-2">
-                <li><Link to="/privacy-policy" className="text-gray-600 hover:text-black">Privacy Policy</Link></li>
-                <li><Link to="/terms" className="text-gray-600 hover:text-black">Terms of Service</Link></li>
-                <li><Link to="/contact" className="text-gray-600 hover:text-black">Contact Us</Link></li>
+                <li><Link to="/PrivacyPolicy" className="text-gray-600 hover:text-black">Privacy Policy</Link></li>
+                <li><Link to="/TermsOfServices" className="text-gray-600 hover:text-black">Terms of Service</Link></li>
+                <li><Link to="/FAQs" className="text-gray-600 hover:text-black">FAQs</Link></li>
               </ul>
             </div>
             <div>
@@ -198,13 +198,13 @@ export default function Dashboard() {
             <div className="flex flex-col items-center md:items-end gap-2">
               <h3 className="font-semibold text-gray-800 mb-2">Follow Us</h3>
               <div className="flex gap-4 text-3xl">
-                <a href="https://facebook.com" target="_blank" rel="noreferrer">
+                <a href="https://www.facebook.com/profile.php?id=61576852940600" target="_blank" rel="noreferrer">
                   <FontAwesomeIcon icon={['fab', 'facebook']} className="text-black hover:text-blue-600" />
                 </a>
-                <a href="https://instagram.com" target="_blank" rel="noreferrer">
+                <a href="https://www.instagram.com/chasma_pasal1/" target="_blank" rel="noreferrer">
                   <FontAwesomeIcon icon={['fab', 'instagram']} className="text-black hover:text-pink-600" />
                 </a>
-                <a href="https://twitter.com" target="_blank" rel="noreferrer">
+                <a href="https://x.com/PasalChasm73054" target="_blank" rel="noreferrer">
                   <FontAwesomeIcon icon={['fab', 'x-twitter']} className="text-black hover:text-blue-400" />
                 </a>
               </div>

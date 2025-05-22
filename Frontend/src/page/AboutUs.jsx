@@ -99,7 +99,7 @@ const AboutUs = () => {
               <h3 className="text-xl font-bold mb-6 text-gray-900 dark:text-white">Quick Facts</h3>
               <ul className="space-y-4">
                 {[
-                  "Founded in 2023",
+                  "Founded in 2025",
                   "1000+ satisfied users",
                   "50+ partner clinics",
                   "Innovation award winner"

@@ -74,8 +74,31 @@ const delete_item = async (req, res) => {
     }
 }
 
+
+// const clear_cart = async (req, res) => {
+//     const { userId } = req.params;
+  
+//     try {
+//       const updatedCart = await Cart.findOneAndUpdate(
+//         { userId },
+//         { $set: { items: [], bill: 0 } },
+//         { new: true }
+//       );
+  
+//       if (!updatedCart) {
+//         return res.status(404).send({ message: 'Cart not found.' });
+//       }
+  
+//       return res.status(200).send({ message: 'Cart cleared successfully.' });
+//     } catch (error) {
+//       console.error('Error clearing cart:', error);
+//       return res.status(500).send({ message: 'Failed to clear cart.' });
+//     }
+// };
+
 module.exports = {
     get_cart_items,
     add_cart_item,
-    delete_item
+    delete_item,
+    // clear_cart,
 }

@@ -23,6 +23,9 @@ import NotificationPage from "./page/NotificationPage";
 import AddDoctor  from "./page/AddDoctor";
 import ForgotPassword from "./page/Forgotpassword";
 import AdminHome from "./components/AdminHome";
+import PrivacyPolicy from "./page/PrivacyPolicy";
+import TermsOfServices from "./page/TermsOfServices";
+import FAQs from "./page/FAQs";
   
 export const router = createBrowserRouter([
     {
@@ -114,7 +117,19 @@ export const router = createBrowserRouter([
           path: "add-doctor",
           element: <AddDoctor/>
   
-        }
+        },
+        {
+          path: "PrivacyPolicy",
+          element: <PrivacyPolicy/>
+          },
+        {
+          path: "TermsOfServices",
+          element: <TermsOfServices/>
+          },
+          {
+          path: "FAQs",
+          element: <FAQs/>
+          }
         ]
       },
     ])

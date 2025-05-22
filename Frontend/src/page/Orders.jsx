@@ -142,8 +142,9 @@ const Orders = () => {
 
 
   const getStatusBadge = (status) => {
+    console.log(status);
     switch (status) {
-      case "completed":
+      case "delivered":
         return <Badge variant="success">{status}</Badge>;
       case "cancelled":
         return <Badge variant="destructive">{status}</Badge>;
@@ -283,36 +284,36 @@ const Orders = () => {
                       </div>
                     </TableCell>
                     <TableCell className="text-right">
-                      <div className="flex justify-end gap-2">
-                        {userInfo?.role === "admin" ? (
-                          <>
-                            <Button
-                              size="sm"
-                              onClick={() => handleUpdate(order._id)}
-                            >
-                              Update
-                            </Button>
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              onClick={() => handleDelete(order._id)}
-                            >
-                              Delete
-                            </Button>
-                          </>
-                        ) : (
-                          order.status === "pending" && (
-                            <Button
-                              size="sm"
-                              variant="destructive"
-                              onClick={() => handleCancel(order._id)}
-                            >
-                              Cancel
-                            </Button>
-                          )
-                        )}
-                      </div>
-                    </TableCell>
+                    <div className="flex justify-end gap-2">
+                      {userInfo?.role === "admin" ? (
+                        <>
+                          <Button
+                            size="sm"
+                            onClick={() => handleUpdate(order._id)}
+                          >
+                            Update
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => handleDelete(order._id)}
+                          >
+                            Delete
+                          </Button>
+                        </>
+                      ) : (
+                        order.status === "pending" && (
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            onClick={() => handleCancel(order._id)}
+                          >
+                            Cancel
+                          </Button>
+                        )
+                      )}
+                    </div>
+                  </TableCell>
 
                   </TableRow>
                 ))}
